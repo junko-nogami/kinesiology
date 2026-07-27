@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>運動学 第8章C 肘関節と前腕の運動</title>
+<style>
+:root{
+  --main:#7a2a3a;        /* 章カラー（運動学 第8章：えんじ） */
+  --main-dark:#5a1c28;
+  --main-light:#a8556a;
+  --accent:#c8a24a;
+  --bg:#f7f4f2;
+  --card:#ffffff;
+  --text:#2c2724;
+  --sub:#6b625e;
+  --line:#e2d9d5;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;}
+body{
+  font-family:"Hiragino Kaku Gothic ProN","Yu Gothic","Meiryo",sans-serif;
+  background:var(--bg); color:var(--text);
+  display:flex; flex-direction:column; min-height:100vh;
+  -webkit-text-size-adjust:100%;
+}
+header{
+  background:var(--main); color:#fff;
+  padding:10px 16px; display:flex; align-items:center; gap:12px;
+  position:sticky; top:0; z-index:20;
+}
+header .ch{font-size:12px; letter-spacing:.12em; opacity:.85;}
+header .ttl{font-size:15px; font-weight:700;}
+header .count{margin-left:auto; font-size:13px; font-variant-numeric:tabular-nums; opacity:.9;}
+
+main{flex:1; display:flex; justify-content:center; padding:18px 14px 8px;}
+.slide{
+  width:100%; max-width:860px; background:var(--card);
+  border:1px solid var(--line); border-radius:14px;
+  box-shadow:0 2px 10px rgba(0,0,0,.05);
+  padding:26px 28px 30px; animation:fade .25s ease;
+}
+@keyframes fade{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:none;}}
+@media (prefers-reduced-motion:reduce){.slide{animation:none;}}
+
+.eyebrow{
+  display:inline-block; font-size:11px; letter-spacing:.14em;
+  color:var(--main); background:#f3e9eb; border-radius:20px;
+  padding:4px 12px; margin-bottom:12px; font-weight:700;
+}
+h2{
+  font-size:23px; line-height:1.4; color:var(--main-dark);
+  border-bottom:3px solid var(--main); padding-bottom:9px; margin-bottom:18px;
+}
+ul{list-style:none;}
+li{position:relative; padding-left:20px; margin-bottom:11px; line-height:1.85; font-size:16px;}
+li::before{content:""; position:absolute; left:2px; top:.72em; width:8px; height:8px; border-radius:2px; background:var(--main-light);}
+li ul{margin-top:8px;}
+li li{font-size:15px; color:var(--sub); margin-bottom:6px;}
+li li::before{background:var(--line); width:6px; height:6px; top:.75em;}
+
+.note{
+  margin-top:16px; padding:11px 14px; font-size:13.5px; line-height:1.75;
+  background:#faf6ee; border-left:4px solid var(--accent); border-radius:0 6px 6px 0;
+  color:#5c4f38;
+}
+.note b{color:#8a6a20;}
+
+.tblwrap{overflow-x:auto; -webkit-overflow-scrolling:touch;}
+table{border-collapse:collapse; width:100%; min-width:520px; font-size:14.5px;}
+th,td{border:1px solid var(--line); padding:9px 11px; text-align:left; line-height:1.7; vertical-align:top;}
+th{background:var(--main); color:#fff; font-weight:700; white-space:nowrap;}
+tbody tr:nth-child(even){background:#faf7f7;}
+table.matrix{min-width:460px; font-size:14px; text-align:center;}
+table.matrix td{text-align:center; padding:8px 4px;}
+table.matrix td:first-child{text-align:left; white-space:nowrap; font-weight:700; background:#f7f1f2;}
+table.matrix th{padding:8px 6px; text-align:center;}
+
+.two{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+.col{border:1px solid var(--line); border-radius:10px; overflow:hidden;}
+.col h4{background:var(--main); color:#fff; font-size:15px; padding:9px 12px;}
+.col.alt h4{background:var(--main-light);}
+.col .body{padding:12px 14px;}
+.col li{font-size:15px; margin-bottom:9px;}
+@media(max-width:640px){.two{grid-template-columns:1fr;}}
+
+.blank{
+  display:inline-block; min-width:4.2em; text-align:center;
+  padding:1px 8px; margin:0 1px; cursor:pointer; user-select:none;
+  background:#f0e6e8; color:transparent;
+  border-bottom:2px dashed var(--main-light); border-radius:4px;
+  transition:background .15s, color .15s;
+}
+.blank:hover{background:#e5d5d9;}
+.blank:focus-visible{outline:3px solid var(--accent); outline-offset:2px;}
+.blank.open{background:transparent; color:var(--main-dark); font-weight:700; border-bottom:2px solid var(--accent); cursor:default;}
+.blank.hint{animation:pulse .9s ease;}
+@keyframes pulse{0%,100%{background:#f0e6e8;}50%{background:var(--accent);}}
+@media (prefers-reduced-motion:reduce){.blank.hint{animation:none;}}
+table.matrix .blank{min-width:2.4em; padding:1px 4px;}
+
+.cover{text-align:center; padding:48px 20px;}
+.cover .sub{font-size:14px; letter-spacing:.2em; color:var(--main-light); margin-bottom:14px;}
+.cover h1{font-size:32px; color:var(--main-dark); line-height:1.4; margin-bottom:10px;}
+.cover .en{font-size:13px; color:var(--sub); letter-spacing:.08em; margin-bottom:26px;}
+.cover .idx{display:inline-block; text-align:left; background:#faf7f7; border:1px solid var(--line); border-radius:10px; padding:16px 22px; font-size:15px; line-height:2;}
+.cover .idx b{color:var(--main);}
+
+footer{position:sticky; bottom:0; background:var(--bg); border-top:1px solid var(--line); padding:10px 14px 14px;}
+.tools{display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-bottom:10px;}
+.tools button{font-family:inherit; font-size:13.5px; font-weight:700; cursor:pointer; border:1.5px solid var(--main); background:#fff; color:var(--main); padding:8px 15px; border-radius:22px; transition:.15s;}
+.tools button:hover{background:var(--main); color:#fff;}
+.tools button.primary{background:var(--main); color:#fff;}
+.tools button.primary:hover{background:var(--main-dark); border-color:var(--main-dark);}
+.tools button:focus-visible{outline:3px solid var(--accent); outline-offset:2px;}
+
+.nav{display:flex; align-items:center; justify-content:center; gap:14px;}
+.nav button{font-family:inherit; font-size:15px; cursor:pointer; border:none; background:var(--main); color:#fff; width:40px; height:40px; border-radius:50%;}
+.nav button:disabled{background:#cfc5c2; cursor:default;}
+.dots{display:flex; gap:5px; flex-wrap:wrap; justify-content:center; max-width:520px;}
+.dot{width:9px; height:9px; border-radius:50%; background:#d5cac7; border:none; padding:0; cursor:pointer;}
+.dot.active{background:var(--main); transform:scale(1.35);}
+.dot:focus-visible{outline:2px solid var(--accent); outline-offset:2px;}
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="ch">運動学 CHAPTER 8</div>
+    <div class="ttl">C 肘関節と前腕の運動</div>
+  </div>
+  <div class="count"><span id="cur">1</span> / <span id="tot">1</span></div>
+</header>
+
+<main><div class="slide" id="slide"></div></main>
+
+<footer>
+  <div class="tools">
+    <button id="btnNext" class="primary">次のカッコを開く</button>
+    <button id="btnAll">すべて表示</button>
+    <button id="btnReset">リセット</button>
+  </div>
+  <div class="nav">
+    <button id="prev" aria-label="前のスライド">◀</button>
+    <div class="dots" id="dots"></div>
+    <button id="next" aria-label="次のスライド">▶</button>
+  </div>
+</footer>
+
+<script>
+/* ============================================================
+   スライドデータ  [[ ]] がクリックで開く空欄になります
+   type: cover / p / tbl / mtx / two
+   ============================================================ */
+const SLIDES = [
+
+{type:"cover", title:"肘関節と前腕の運動", en:"Movement of the Elbow and Forearm",
+ sub:"第8章 四肢と体幹の運動",
+ index:["<b>1.</b> 骨格","<b>2.</b> 関節（3関節＋下橈尺関節・靱帯）","<b>3.</b> 屈曲伸展／回内回外／肘角","<b>4.</b> 肘関節の筋（8筋）"]},
+
+/* ---------- 1 骨格 ---------- */
+{type:"p", eyebrow:"1 骨格", title:"肘関節をつくる骨（図8-26）",
+ items:[
+  "肘関節は[[上腕骨]]・[[尺骨]]・[[橈骨]]からなる",
+  "体表から触知できる部位<ul><li>上腕骨[[内側上顆]]・[[外側上顆]]</li><li>[[尺骨神経溝]]</li><li>[[肘頭]]</li><li>[[橈骨頭]]</li></ul>"
+ ],
+ note:"<b>触診のコツ：</b>内側上顆のすぐ後ろにあるのが尺骨神経溝。ここを打つと小指側がしびれる、いわゆる「ファニーボーン」の場所です。"},
+
+/* ---------- 2 関節 ---------- */
+{type:"p", eyebrow:"2 関節", title:"肘関節の全体像（図8-26）",
+ items:[
+  "肘関節は[[腕尺関節]]・[[腕橈関節]]・[[上橈尺関節]]の[[3]]つの関節よりなる[[複関節]]である",
+  "全体が[[1つの関節包]]に包まれている",
+  "前腕遠位端には[[下橈尺関節]]がある"
+ ],
+ note:"<b>ここがポイント：</b>「3つの関節が1つの袋に入っている」のが肘の特徴。だから1か所の炎症や拘縮が肘全体の動きに影響します。なお下橈尺関節は肘関節には含まれません。"},
+
+{type:"tbl", eyebrow:"2 関節", title:"3つの関節の構成と働き",
+ head:["関節","構成","関節の型","行う運動"],
+ rows:[
+  ["腕尺関節","上腕骨[[滑車]]＋尺骨[[滑車切痕]]","[[蝶番関節]]<br>（[[螺旋関節]]とも呼ばれる）","肘の[[屈曲]]・[[伸展]]"],
+  ["腕橈関節","上腕骨[[小頭]]＋[[橈骨頭窩]]","[[球関節]]","肘の[[屈曲]]・[[伸展]]<br>前腕の[[回内]]・[[回外]]"],
+  ["上橈尺関節","橈骨頭の[[関節環状面]]＋尺骨の[[橈骨切痕]]","[[車軸関節]]","前腕の[[回内]]・[[回外]]<br>（[[下橈尺関節]]とともに）"]],
+ note:"<b>覚え方：</b>腕尺関節が「[[螺旋]]関節」とも呼ばれるのは、屈伸のときにわずかならせん状の動きをするため。国試では<b>腕尺＝蝶番／腕橈＝球／上橈尺＝車軸</b>の組み合わせが問われます。"},
+
+{type:"p", eyebrow:"2 関節", title:"関節包と靱帯（図8-27）",
+ items:[
+  "<b>関節包</b>：前後面は[[柔軟]]であるが、両側は[[強固]]である",
+  "<b>靱帯</b>は[[3]]つ<ul><li>[[内側側副靱帯]]</li><li>[[外側側副靱帯]]</li><li>[[橈骨輪状靱帯]]</li></ul>",
+  "内・外側側副靱帯 → 肘関節の[[内転・外転方向]]の動きを抑える",
+  "橈骨輪状靱帯 → [[橈骨頭]]を輪状にとりまき、橈骨が尺骨の[[橈骨切痕]]で軸旋するのを制御する",
+  "橈骨輪状靱帯は[[関節包]]・[[外側側副靱帯]]と強固に結合している"
+ ],
+ note:"<b>ここがポイント：</b>関節包が「前後は柔らかく、両側は強固」だから、肘は<b>屈伸はできるが横ぶれはしない</b>。構造と機能がそのまま対応しています。"},
+
+{type:"p", eyebrow:"2 関節", title:"下橈尺関節",
+ items:[
+  "[[橈骨]]・[[尺骨]]の[[遠位端]]にある",
+  "[[上橈尺関節]]とともに前腕の[[回内]]・[[回外]]を行う",
+  "下橈尺関節腔と[[手関節腔]]を隔てるように、[[三角形]]の[[関節円板]]が存在する"
+ ],
+ note:"<b>ここがポイント：</b>回内・回外は「上と下、2つの橈尺関節がペアで働く」運動。片方だけでは成立しません。"},
+
+/* ---------- 3 運動 ---------- */
+{type:"p", eyebrow:"3 肘関節の運動", title:"a. 屈曲・伸展",
+ items:[
+  "肘関節の自動運動域は[[0〜145°]]である",
+  "[[小児]]や[[女子]]では伸展時に約[[10°]]の[[過伸展]]をみることがある",
+  "<b>伸展の制限因子</b><ul><li>[[肘頭]]と[[肘頭窩]]の[[骨性制限]]</li><li>[[側副靱帯]]の緊張</li><li>[[屈筋群]]の抵抗</li></ul>",
+  "<b>屈曲の制限因子</b><ul><li>[[屈筋群]]収縮による[[屈側軟部組織]]の[[量的増加]]</li></ul>"
+ ],
+ note:"<b>比べて覚える：</b>伸展は<b>骨がぶつかって</b>止まり、屈曲は<b>筋肉が邪魔をして</b>止まる。止まり方がまったく違うのがポイントです。"},
+
+{type:"p", eyebrow:"3 肘関節の運動", title:"b. 前腕の回内・回外（可動域）",
+ items:[
+  "肘関節[[90°]]屈曲位での回内・回外はそれぞれ[[90°]]である",
+  "肘関節[[伸展位]]での回内・回外には[[肩関節]]の動きが加わる",
+  "上肢全体としては約[[360°]]の可動性がある"
+ ],
+ note:"<b>なぜ90°屈曲位で測るのか：</b>肘を伸ばしたままだと肩の内旋・外旋が混ざってしまい、前腕だけの回旋を測れないからです。だから回内・回外の測定は必ず肘90°屈曲位で行います。"},
+
+{type:"p", eyebrow:"3 肘関節の運動", title:"b. 回内・回外のメカニズム（図8-28）",
+ items:[
+  "橈骨[[上端]]は[[橈骨輪状靱帯]]内を回る",
+  "橈骨[[下端]]は[[尺骨頭]]の周囲を回る",
+  "橈骨の[[長軸]]は常に[[上腕骨小頭]]の[[中央]]を通過する",
+  "回内・回外運動では[[尺骨]]は[[回旋しない]]"
+ ],
+ note:"<b>イメージで理解：</b>尺骨は動かない「軸」。その周りを橈骨が乗り越えるように回るので、回内位では橈骨と尺骨が<b>交差（クロス）</b>します。"},
+
+{type:"p", eyebrow:"3 肘関節の運動", title:"c. 肘角（運搬角）（図8-29）",
+ items:[
+  "肘関節を[[伸展]]し前腕を[[回外]]すると、前腕は上腕に対して少し[[橈側]]に偏位する",
+  "臨床的には[[上腕軸]]に対する[[前腕軸]]のなす角度を[[肘角]]（[[肘外偏角]]）という",
+  "これは[[生理的外反肘]]となる",
+  "物を手にさげて運ぶときの形から[[運搬角]]ともいう",
+  "成人男子では約[[10°]]、小児や女子では[[15°]]以上のこともある",
+  "[[20°]]以上の肘角が認められるときは[[病的外反肘]]とされる"
+ ],
+ note:"<b>数値を3段階で：</b>成人男子 約10° → 小児・女子 15°以上のことも → <b>20°以上は病的外反肘</b>。境界の20°が国試のねらい目です。"},
+
+/* ---------- 4 筋 ---------- */
+{type:"two", eyebrow:"4 肘関節の筋", title:"肘関節・前腕の運動に関与する筋（8筋）",
+ lead:"上腕の筋[[4]]つと前腕の筋[[4]]つに分けて整理します。",
+ left:{h:"上腕の筋（4筋）", items:[
+   "前面：[[上腕二頭筋]]・[[上腕筋]]",
+   "後面：[[上腕三頭筋]]・[[肘筋]]"]},
+ right:{h:"前腕の筋（4筋）", items:[
+   "外側：[[腕橈骨筋]]・[[回外筋]]",
+   "内側：[[円回内筋]]",
+   "前側：[[方形回内筋]]"]},
+ note:"<b>まず8つを丸暗記：</b>上腕は「屈2・伸2」できれいに対、前腕は「回外2（腕橈骨筋・回外筋）・回内2（円回内筋・方形回内筋）」。前腕は<b>回内筋2つに『回内』の字が入っている</b>ので迷いません。"},
+
+{type:"tbl", eyebrow:"4 肘関節の筋", title:"補助的に働く前腕の筋群",
+ lead:"その他に前腕には、手関節と指の運動に関する筋群があります。",
+ head:["筋群","含まれる筋","肘・前腕への作用"],
+ rows:[
+  ["手関節[[屈筋群]]<br>（上腕骨[[内側上顆]]起始）","[[橈側手根屈筋]]、[[長掌筋]]、[[尺側手根屈筋]]、[[浅指屈筋]]","肘関節[[屈曲]]に[[補助的]]に働く"],
+  ["手関節[[伸筋群]]<br>（上腕骨[[外側上顆]]起始）","[[長橈側手根伸筋]]、[[短橈側手根伸筋]]、[[指伸筋]]、[[小指伸筋]]、[[尺側手根伸筋]]","肘関節[[伸展]]に[[補助的]]に働く"],
+  ["[[長母指外転筋]]<br>（[[橈尺骨]]および[[骨間膜]]起始）","—","前腕[[回外]]に[[補助的]]に働く"]],
+ note:"<b>起始で覚える：</b>内側上顆＝屈筋群のふるさと／外側上顆＝伸筋群のふるさと。上腕骨のどちら側から起こるかで、肘への補助作用の向きも決まります。"},
+
+{type:"tbl", eyebrow:"4 肘関節の筋", title:"表8-5 肘関節の筋 ①起始・停止",
+ head:["筋","起始","停止"],
+ rows:[
+  ["上腕二頭筋","長頭：肩甲骨[[関節上結節]]<br>短頭：[[烏口突起]]","2頭合して、[[橈骨粗面]]と[[前腕筋膜]]上内側"],
+  ["上腕筋","内・外側[[上腕筋間中隔]]と上腕骨[[前面]]","[[尺骨粗面]]と[[肘関節包]]"],
+  ["上腕三頭筋","長頭：肩甲骨[[関節下結節]]<br>内側頭：上腕骨後内側、筋間中隔<br>外側頭：上腕骨後外側、筋間中隔","3頭合して[[肘頭]]"],
+  ["肘筋","上腕骨[[外側上顆]]","[[肘頭外側面]]"],
+  ["腕橈骨筋","上腕骨[[外側下部]]、外側筋間中隔","橈骨[[茎状突起]]"],
+  ["円回内筋","上腕頭：[[内側上顆]]、内側筋間中隔<br>尺骨頭：[[鉤状突起]]内側","2頭合して[[橈骨中央外側]]・後側部"],
+  ["方形回内筋","[[尺骨]]下部前面","[[橈骨]]下端前面"],
+  ["回外筋","上腕骨[[外側上顆]]、[[尺骨後上面]]、肘関節包後面、[[橈骨輪状靱帯]]","橈骨[[外側]]・前面"]],
+ note:"<b>停止で見分ける：</b>上腕二頭筋は[[橈骨]]粗面、上腕筋は[[尺骨]]粗面。<b>「二頭筋＝橈骨」だから回外もできる</b>——上腕筋が純粋な屈筋である理由がここにあります。"},
+
+{type:"tbl", eyebrow:"4 肘関節の筋", title:"表8-5 肘関節の筋 ②神経支配・作用",
+ head:["筋","神経支配","作用"],
+ rows:[
+  ["上腕二頭筋","[[筋皮神経]]（C5〜C6）","肩：[[屈曲]]／肘：[[屈曲]]／前腕：[[回外]]"],
+  ["上腕筋","[[筋皮神経]]（ときに橈骨神経）（C5〜C6）","肘：[[屈曲]]"],
+  ["上腕三頭筋","[[橈骨神経]]（C6〜C8）","肩：[[伸展]]／肘：[[伸展]]"],
+  ["肘筋","[[橈骨神経]]（C7〜C8）","肘：[[伸展]]、[[肘関節包の緊張]]"],
+  ["腕橈骨筋","[[橈骨神経]]（C5〜C8）","肘：[[屈曲]]／前腕：[[回内]]・[[回外]]"],
+  ["円回内筋","[[正中神経]]（ときに筋皮神経）（C6〜C7）","肘：[[屈曲]]／前腕：[[回内]]"],
+  ["方形回内筋","[[正中神経]]（C6〜T1）","前腕：[[回内]]"],
+  ["回外筋","[[橈骨神経]]（C5〜C8）","前腕：[[回外]]"]],
+ note:"<b>神経で整理：</b>屈筋（上腕二頭筋・上腕筋）＝<b>筋皮神経</b>／伸筋と外側の筋（上腕三頭筋・肘筋・腕橈骨筋・回外筋）＝<b>橈骨神経</b>／回内筋（円回内筋・方形回内筋）＝<b>正中神経</b>。<br>※腕橈骨筋は「屈筋なのに橈骨神経」——ここが最頻出のひっかけです。"},
+
+{type:"mtx", eyebrow:"4 肘関節の筋", title:"表8-6 肘関節および前腕の筋活動と関節運動",
+ lead:"○＝主に働く筋（動筋 prime mover）／△＝補助的に働く筋（補助動筋 assistant mover）",
+ head:["筋","屈曲","伸展","回内","回外"],
+ rows:[
+  ["上腕二頭筋","○","","","△"],
+  ["上腕筋","○","","",""],
+  ["腕橈骨筋","○","","△","△"],
+  ["円回内筋","△","","○",""],
+  ["上腕三頭筋","","○","",""],
+  ["肘筋","","△","△",""],
+  ["方形回内筋","","","○",""],
+  ["回外筋","","","","○"],
+  ["手関節屈筋群","△","","△",""],
+  ["手関節伸筋群","","△","",""],
+  ["長母指外転筋","","","","△"]],
+ note:"<b>縦に読む：</b>屈曲の動筋（○）は<b>上腕二頭筋・上腕筋・腕橈骨筋の3つ</b>、伸展の動筋は<b>上腕三頭筋だけ</b>、回内の動筋は<b>円回内筋・方形回内筋</b>、回外の動筋は<b>回外筋だけ</b>。<br>※これらの表は、重力などの外力を無視した状態で筋が収縮（短縮）したときに起こる関節運動を示しています。"},
+
+/* ---------- 各筋の詳細 ---------- */
+{type:"p", eyebrow:"筋の各論 ①", title:"上腕二頭筋（図8-30）",
+ items:[
+  "上腕の[[前面]]にあり、その[[全体]]を容易に体表から触れることが可能である",
+  "[[肩関節]]と[[肘関節]]の両方にまたがる[[2関節筋]]である",
+  "しかしその働きからは、[[肩]]・[[肘]]・[[橈尺]]関節の運動に関与する[[3関節筋]]ともいえる",
+  "通常の[[肩関節]]の運動には[[弱い]]働きしかもたない",
+  "[[短頭]]は[[烏口腕筋]]と平行して走行し、[[烏口突起]]につく",
+  "[[長頭腱]]は上腕骨頭前面の[[結節間溝]]を通って[[関節内]]を貫通し、肩甲骨[[関節窩の上縁]]につく"
+ ],
+ note:"<b>8章Bとつながる：</b>長頭腱が関節腔内を通る話は、肩関節の関節包のところで出てきました。同じ腱を「肩側から」「肘側から」見ているだけです。"},
+
+{type:"p", eyebrow:"筋の各論 ①", title:"上腕二頭筋の力学と、肘屈筋の使い分け",
+ items:[
+  "肘関節屈曲では、肘屈筋群のなかで[[最も強力]]な働きをする",
+  "停止部が前腕の[[肘関節に近い]]部位にあり、前腕骨が[[直角]]に近い肘関節で最も[[屈曲力]]を発揮できる",
+  "<b>前腕の肢位によって、おもに働く屈筋が変わる</b><ul><li>前腕[[回外位]] → [[上腕二頭筋]]</li><li>前腕[[回内位]] → [[上腕筋]]</li><li>前腕[[回内回外中間位]] → [[腕橈骨筋]]</li></ul>"
+ ],
+ note:"<b>実技につながる：</b>だから上腕二頭筋の徒手筋力検査は<b>前腕回外位</b>、腕橈骨筋は<b>中間位</b>で行います。手のひらの向きを変えるだけで主役の筋が入れ替わります。"},
+
+{type:"p", eyebrow:"筋の各論 ②", title:"上腕筋（図8-31）",
+ items:[
+  "強い抵抗を加えて肘関節を屈曲したとき、[[上腕二頭筋の外側]]に触れる",
+  "肘関節屈曲に関する[[唯一]]の[[純粋な「屈筋」]]である"
+ ],
+ note:"<b>ここがポイント：</b>「純粋な屈筋」＝<b>回内・回外の作用をもたない</b>ということ。停止が尺骨粗面（回らない骨）だからです。"},
+
+{type:"p", eyebrow:"筋の各論 ③", title:"腕橈骨筋（図8-32）",
+ items:[
+  "強い抵抗を加えて肘関節を屈曲したとき、前腕の[[上前面橈側]]に触れる",
+  "[[筋皮神経麻痺]]で上腕二頭筋と上腕筋が麻痺したとき、[[唯一残された]]肘関節の[[屈筋]]となる",
+  "停止部が肘関節から[[遠い]]部位にあるため、上腕二頭筋よりも[[力学的有利性]]は[[大きい]]",
+  "肘関節を屈曲しながら<ul><li>前腕が[[回外位]]にあれば → これを[[回内]]する</li><li>前腕が[[回内位]]にあれば → これを[[回外]]する</li><li>つまり[[中間位]]に戻そうとする働きがある</li></ul>"
+ ],
+ note:"<b>臨床でよく出る：</b>筋皮神経麻痺でも肘は曲げられる——その主役が腕橈骨筋（橈骨神経支配）。回内・回外の両方に働けるのは、常に中間位へ引き戻すためです。"},
+
+{type:"p", eyebrow:"筋の各論 ④", title:"上腕三頭筋（図8-33）",
+ items:[
+  "上腕の[[後表面全域]]にその収縮を触れることができる",
+  "[[肩関節]]と[[肘関節]]の運動に関与する[[2関節筋]]で、[[長頭]]だけが2つの関節にまたがって走行し、[[肩関節伸展]]に補助的に働く",
+  "肘関節伸展は、3頭のうちでもおもに[[内側頭]]の線維が強力に働く",
+  "停止部が肘関節の[[運動軸に近い]]ため、力学的には[[荷重の腕]]のほうが[[力の腕]]より[[長く]]、[[力]]よりも[[スピード]]に有利な構造になっている",
+  "[[プッシュ・アップ]]のような動作で強力に力を発揮する"
+ ],
+ note:"<b>てこで理解：</b>力点が支点のすぐそばにあるので、大きな力は出しにくい代わりに<b>小さな収縮で先端が大きく速く動く</b>。投球やパンチが速い理由です。"},
+
+{type:"p", eyebrow:"筋の各論 ⑤", title:"肘筋（図8-34）",
+ items:[
+  "肘関節を[[伸展]]しながら、[[ドアの把手]]を[[回内]]方向に強く回すような動作で、[[肘頭の外側]]に筋の収縮を触れる",
+  "[[上腕三頭筋]]とともに肘関節の[[伸展筋]]である",
+  "抵抗が[[強い]]ときは前腕[[回内]]に作用する",
+  "肘関節が[[伸展]]しているときは、[[関節包]]に[[緊張]]を与えて[[関節腔内]]に入り込まないようにする"
+ ],
+ note:"<b>ここがポイント：</b>肘筋の「関節包を引く」働きは、表8-5の作用欄にも<b>「肘関節包の緊張」</b>として載っています。伸展のたびに関節包が挟まらないようにする、小さいけれど大事な役割です。"},
+
+{type:"p", eyebrow:"筋の各論 ⑥", title:"円回内筋（図8-35）",
+ items:[
+  "前腕[[上前側]]の[[肘窩尺側]]に筋の一部を触れることができる",
+  "[[方形回内筋]]とともに前腕の[[回内]]をおもな働きとする",
+  "とくに[[急激]]な回内運動や、[[抵抗に逆らう]]運動で活動する",
+  "肘関節屈曲作用は抵抗に逆らう運動で、[[上腕二頭筋]]とともに働いたとき、その[[回外力]]を[[中和]]するように作用する",
+  "[[手背]]を[[顔面]]に近づけるような動作では円回内筋が作用する"
+ ],
+ note:"<b>おなじみのパターン：</b>「2つの筋が同時に働くと、余分な回旋成分が打ち消し合う」——上肢帯（前鋸筋と小胸筋）、肩（肩甲下筋と棘下筋・小円筋）に続いて3回目の登場です。"},
+
+{type:"p", eyebrow:"筋の各論 ⑦", title:"方形回内筋（図8-35）",
+ items:[
+  "前腕[[下前側]]の[[深層]]にある筋で、[[触れることはできない]]",
+  "肘関節の[[肢位に無関係]]に、前腕の[[回内]]作用を[[唯一の機能]]とする",
+  "右手で[[ネジ回し]]を使ってネジを[[緩める]]動作のような、肘関節を[[伸展]]しながら前腕を[[回内]]するときに[[上腕三頭筋]]とともに作用する"
+ ],
+ note:"<b>比べて覚える：</b>円回内筋は肘屈曲も手伝う「兼業」、方形回内筋は回内だけの「専業」。肘の角度に左右されないのも方形回内筋の特徴です。"},
+
+{type:"p", eyebrow:"筋の各論 ⑧", title:"回外筋（図8-36）",
+ items:[
+  "前腕[[上外側]]の[[深層]]にある筋で、[[触れることはできない]]",
+  "肘関節[[伸展位]]での前腕[[回外]]に有効に働く",
+  "肘関節[[屈曲位]]で強い抵抗に逆らったり、[[急速]]な回外運動では、[[上腕二頭筋]]の働きが必要となる"
+ ],
+ note:"<b>役割分担：</b>ゆっくり・肘を伸ばした回外は<b>回外筋</b>、力の要る・素早い回外は<b>上腕二頭筋</b>が加勢。表8-6で回外筋が○、上腕二頭筋が△なのはこのためです。"},
+
+/* ---------- まとめ ---------- */
+{type:"tbl", eyebrow:"まとめ", title:"重要数値の総整理",
+ lead:"数値問題はここから出ます。空欄で確認しましょう。",
+ head:["項目","数値"],
+ rows:[
+  ["肘関節を構成する関節の数","[[3]]つ（複関節）"],
+  ["肘関節の靱帯の数","[[3]]つ"],
+  ["肘関節の自動運動域","[[0〜145°]]"],
+  ["小児・女子にみられる過伸展","約[[10°]]"],
+  ["肘90°屈曲位での回内・回外","それぞれ[[90°]]"],
+  ["上肢全体としての回旋可動性","約[[360°]]"],
+  ["肘角（成人男子）","約[[10°]]"],
+  ["肘角（小児・女子）","[[15°]]以上のこともある"],
+  ["病的外反肘とされる肘角","[[20°]]以上"],
+  ["肘関節・前腕の運動に関与する筋（上腕＋前腕）","[[4]]筋＋[[4]]筋＝[[8]]筋"]],
+ note:"<b>※</b>関節可動域は年齢・性別・運動歴などにより個人差があり、「正常関節可動域」という概念はありません。本章の数値はすべて<b>参考関節可動域</b>です（8章A脚注）。"},
+
+{type:"two", eyebrow:"まとめ", title:"神経支配で最終チェック",
+ lead:"神経ごとに支配筋をまとめると、麻痺の問題に強くなります。",
+ left:{h:"筋皮神経 / 正中神経", items:[
+   "筋皮神経：[[上腕二頭筋]]・[[上腕筋]]",
+   "正中神経：[[円回内筋]]・[[方形回内筋]]"]},
+ right:{h:"橈骨神経", items:[
+   "[[上腕三頭筋]]・[[肘筋]]",
+   "[[腕橈骨筋]]・[[回外筋]]"]},
+ note:"<b>最後の確認：</b>筋皮神経が麻痺しても、<b>腕橈骨筋（橈骨神経）</b>が残るので肘は曲げられます。逆に橈骨神経麻痺では、伸展筋と回外筋がまとめてやられます。"}
+
+];
+
+/* ============================================================
+   描画・操作
+   ============================================================ */
+const slideEl=document.getElementById('slide');
+const dotsEl=document.getElementById('dots');
+let idx=0;
+
+function blanks(t){
+  return String(t).replace(/\[\[(.+?)\]\]/g,(m,a)=>
+    `<span class="blank" tabindex="0" role="button" aria-label="空欄">${a}</span>`);
+}
+const li=arr=>arr.map(t=>`<li>${blanks(t)}</li>`).join('');
+
+function render(){
+  const s=SLIDES[idx];
+  let h='';
+
+  if(s.type==='cover'){
+    h=`<div class="cover">
+        <div class="sub">${s.sub}</div>
+        <h1>${s.title}</h1>
+        <div class="en">${s.en}</div>
+        <div class="idx">${s.index.join('<br>')}</div>
+       </div>`;
+  } else {
+    h+=`<div class="eyebrow">${s.eyebrow}</div><h2>${s.title}</h2>`;
+    if(s.lead) h+=`<p style="margin-bottom:14px;line-height:1.85;font-size:15.5px;">${blanks(s.lead)}</p>`;
+
+    if(s.type==='p'){
+      h+=`<ul>${li(s.items)}</ul>`;
+    } else if(s.type==='tbl'){
+      h+=`<div class="tblwrap"><table><thead><tr>${
+        s.head.map(x=>`<th>${x}</th>`).join('')}</tr></thead><tbody>${
+        s.rows.map(r=>`<tr>${r.map(c=>`<td>${blanks(c)}</td>`).join('')}</tr>`).join('')
+      }</tbody></table></div>`;
+    } else if(s.type==='mtx'){
+      h+=`<div class="tblwrap"><table class="matrix"><thead><tr>${
+        s.head.map(x=>`<th>${x}</th>`).join('')}</tr></thead><tbody>${
+        s.rows.map(r=>`<tr>${r.map((c,i)=>
+          `<td>${i===0?c:(c?blanks('[['+c+']]'):'')}</td>`).join('')}</tr>`).join('')
+      }</tbody></table></div>`;
+    } else if(s.type==='two'){
+      h+=`<div class="two">
+            <div class="col"><h4>${s.left.h}</h4><div class="body"><ul>${li(s.left.items)}</ul></div></div>
+            <div class="col alt"><h4>${s.right.h}</h4><div class="body"><ul>${li(s.right.items)}</ul></div></div>
+          </div>`;
+    }
+    if(s.note) h+=`<div class="note">${blanks(s.note)}</div>`;
+  }
+
+  slideEl.innerHTML=h;
+  document.getElementById('cur').textContent=idx+1;
+  [...dotsEl.children].forEach((d,i)=>d.classList.toggle('active',i===idx));
+  document.getElementById('prev').disabled=(idx===0);
+  document.getElementById('next').disabled=(idx===SLIDES.length-1);
+  slideEl.querySelectorAll('.blank').forEach(b=>{
+    b.addEventListener('click',()=>b.classList.add('open'));
+    b.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();b.classList.add('open');}});
+  });
+  window.scrollTo({top:0,behavior:'instant'});
+}
+
+document.getElementById('tot').textContent=SLIDES.length;
+SLIDES.forEach((_,i)=>{
+  const b=document.createElement('button');
+  b.className='dot'; b.setAttribute('aria-label',`スライド${i+1}`);
+  b.onclick=()=>{idx=i;render();};
+  dotsEl.appendChild(b);
+});
+
+document.getElementById('prev').onclick=()=>{if(idx>0){idx--;render();}};
+document.getElementById('next').onclick=()=>{if(idx<SLIDES.length-1){idx++;render();}};
+document.getElementById('btnNext').onclick=()=>{
+  const b=slideEl.querySelector('.blank:not(.open)');
+  if(b){b.classList.add('open','hint'); setTimeout(()=>b.classList.remove('hint'),900);
+        b.scrollIntoView({block:'center',behavior:'smooth'});}
+};
+document.getElementById('btnAll').onclick=()=>
+  slideEl.querySelectorAll('.blank').forEach(b=>b.classList.add('open'));
+document.getElementById('btnReset').onclick=()=>
+  slideEl.querySelectorAll('.blank').forEach(b=>b.classList.remove('open'));
+
+document.addEventListener('keydown',e=>{
+  if(e.target.classList.contains('blank'))return;
+  if(e.key==='ArrowRight'&&idx<SLIDES.length-1){idx++;render();}
+  if(e.key==='ArrowLeft'&&idx>0){idx--;render();}
+});
+
+render();
+</script>
+</body>
+</html>
