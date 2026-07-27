@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>運動学 第8章B 肩関節の運動</title>
+<style>
+:root{
+  --main:#7a2a3a;        /* 章カラー（運動学 第8章：えんじ） */
+  --main-dark:#5a1c28;
+  --main-light:#a8556a;
+  --accent:#c8a24a;
+  --bg:#f7f4f2;
+  --card:#ffffff;
+  --text:#2c2724;
+  --sub:#6b625e;
+  --line:#e2d9d5;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;}
+body{
+  font-family:"Hiragino Kaku Gothic ProN","Yu Gothic","Meiryo",sans-serif;
+  background:var(--bg); color:var(--text);
+  display:flex; flex-direction:column; min-height:100vh;
+  -webkit-text-size-adjust:100%;
+}
+header{
+  background:var(--main); color:#fff;
+  padding:10px 16px; display:flex; align-items:center; gap:12px;
+  position:sticky; top:0; z-index:20;
+}
+header .ch{font-size:12px; letter-spacing:.12em; opacity:.85;}
+header .ttl{font-size:15px; font-weight:700;}
+header .count{margin-left:auto; font-size:13px; font-variant-numeric:tabular-nums; opacity:.9;}
+
+main{flex:1; display:flex; justify-content:center; padding:18px 14px 8px;}
+.slide{
+  width:100%; max-width:860px; background:var(--card);
+  border:1px solid var(--line); border-radius:14px;
+  box-shadow:0 2px 10px rgba(0,0,0,.05);
+  padding:26px 28px 30px; animation:fade .25s ease;
+}
+@keyframes fade{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:none;}}
+@media (prefers-reduced-motion:reduce){.slide{animation:none;}}
+
+.eyebrow{
+  display:inline-block; font-size:11px; letter-spacing:.14em;
+  color:var(--main); background:#f3e9eb; border-radius:20px;
+  padding:4px 12px; margin-bottom:12px; font-weight:700;
+}
+h2{
+  font-size:23px; line-height:1.4; color:var(--main-dark);
+  border-bottom:3px solid var(--main); padding-bottom:9px; margin-bottom:18px;
+}
+ul{list-style:none;}
+li{position:relative; padding-left:20px; margin-bottom:11px; line-height:1.85; font-size:16px;}
+li::before{content:""; position:absolute; left:2px; top:.72em; width:8px; height:8px; border-radius:2px; background:var(--main-light);}
+li ul{margin-top:8px;}
+li li{font-size:15px; color:var(--sub); margin-bottom:6px;}
+li li::before{background:var(--line); width:6px; height:6px; top:.75em;}
+
+.note{
+  margin-top:16px; padding:11px 14px; font-size:13.5px; line-height:1.75;
+  background:#faf6ee; border-left:4px solid var(--accent); border-radius:0 6px 6px 0;
+  color:#5c4f38;
+}
+.note b{color:#8a6a20;}
+
+.tblwrap{overflow-x:auto; -webkit-overflow-scrolling:touch;}
+table{border-collapse:collapse; width:100%; min-width:520px; font-size:14.5px;}
+th,td{border:1px solid var(--line); padding:9px 11px; text-align:left; line-height:1.7; vertical-align:top;}
+th{background:var(--main); color:#fff; font-weight:700; white-space:nowrap;}
+tbody tr:nth-child(even){background:#faf7f7;}
+table.matrix{min-width:640px; font-size:13.5px; text-align:center;}
+table.matrix td{text-align:center; padding:7px 4px;}
+table.matrix td:first-child{text-align:left; white-space:nowrap; font-weight:700; background:#f7f1f2;}
+table.matrix th{padding:8px 4px; text-align:center;}
+
+.two{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+.col{border:1px solid var(--line); border-radius:10px; overflow:hidden;}
+.col h4{background:var(--main); color:#fff; font-size:15px; padding:9px 12px;}
+.col.alt h4{background:var(--main-light);}
+.col .body{padding:12px 14px;}
+.col li{font-size:15px; margin-bottom:9px;}
+@media(max-width:640px){.two{grid-template-columns:1fr;}}
+
+.blank{
+  display:inline-block; min-width:4.2em; text-align:center;
+  padding:1px 8px; margin:0 1px; cursor:pointer; user-select:none;
+  background:#f0e6e8; color:transparent;
+  border-bottom:2px dashed var(--main-light); border-radius:4px;
+  transition:background .15s, color .15s;
+}
+.blank:hover{background:#e5d5d9;}
+.blank:focus-visible{outline:3px solid var(--accent); outline-offset:2px;}
+.blank.open{background:transparent; color:var(--main-dark); font-weight:700; border-bottom:2px solid var(--accent); cursor:default;}
+.blank.hint{animation:pulse .9s ease;}
+@keyframes pulse{0%,100%{background:#f0e6e8;}50%{background:var(--accent);}}
+@media (prefers-reduced-motion:reduce){.blank.hint{animation:none;}}
+table.matrix .blank{min-width:2.4em; padding:1px 4px;}
+
+.cover{text-align:center; padding:48px 20px;}
+.cover .sub{font-size:14px; letter-spacing:.2em; color:var(--main-light); margin-bottom:14px;}
+.cover h1{font-size:32px; color:var(--main-dark); line-height:1.4; margin-bottom:10px;}
+.cover .en{font-size:13px; color:var(--sub); letter-spacing:.08em; margin-bottom:26px;}
+.cover .idx{display:inline-block; text-align:left; background:#faf7f7; border:1px solid var(--line); border-radius:10px; padding:16px 22px; font-size:15px; line-height:2;}
+.cover .idx b{color:var(--main);}
+
+footer{position:sticky; bottom:0; background:var(--bg); border-top:1px solid var(--line); padding:10px 14px 14px;}
+.tools{display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-bottom:10px;}
+.tools button{font-family:inherit; font-size:13.5px; font-weight:700; cursor:pointer; border:1.5px solid var(--main); background:#fff; color:var(--main); padding:8px 15px; border-radius:22px; transition:.15s;}
+.tools button:hover{background:var(--main); color:#fff;}
+.tools button.primary{background:var(--main); color:#fff;}
+.tools button.primary:hover{background:var(--main-dark); border-color:var(--main-dark);}
+.tools button:focus-visible{outline:3px solid var(--accent); outline-offset:2px;}
+
+.nav{display:flex; align-items:center; justify-content:center; gap:14px;}
+.nav button{font-family:inherit; font-size:15px; cursor:pointer; border:none; background:var(--main); color:#fff; width:40px; height:40px; border-radius:50%;}
+.nav button:disabled{background:#cfc5c2; cursor:default;}
+.dots{display:flex; gap:5px; flex-wrap:wrap; justify-content:center; max-width:520px;}
+.dot{width:9px; height:9px; border-radius:50%; background:#d5cac7; border:none; padding:0; cursor:pointer;}
+.dot.active{background:var(--main); transform:scale(1.35);}
+.dot:focus-visible{outline:2px solid var(--accent); outline-offset:2px;}
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="ch">運動学 CHAPTER 8</div>
+    <div class="ttl">B 肩関節の運動</div>
+  </div>
+  <div class="count"><span id="cur">1</span> / <span id="tot">1</span></div>
+</header>
+
+<main><div class="slide" id="slide"></div></main>
+
+<footer>
+  <div class="tools">
+    <button id="btnNext" class="primary">次のカッコを開く</button>
+    <button id="btnAll">すべて表示</button>
+    <button id="btnReset">リセット</button>
+  </div>
+  <div class="nav">
+    <button id="prev" aria-label="前のスライド">◀</button>
+    <div class="dots" id="dots"></div>
+    <button id="next" aria-label="次のスライド">▶</button>
+  </div>
+</footer>
+
+<script>
+/* ============================================================
+   スライドデータ  [[ ]] がクリックで開く空欄になります
+   type: cover / p / tbl / mtx（○△マトリクス）/ two
+   ============================================================ */
+const SLIDES = [
+
+{type:"cover", title:"肩関節の運動", en:"Movement of the Shoulder Joint",
+ sub:"第8章 四肢と体幹の運動",
+ index:["<b>1.</b> 骨格（上腕骨）","<b>2.</b> 関節（関節包・関節唇・靱帯・腱板）","<b>3.</b> 肩関節の運動／肩甲上腕リズム","<b>4.</b> 肩関節の筋（三角筋ほか）"]},
+
+/* ---------- 1 骨格 ---------- */
+{type:"p", eyebrow:"1 骨格", title:"肩関節をつくる骨（図8-16）",
+ items:[
+  "肩関節は[[肩甲骨]]と[[上腕骨]]からなる",
+  "上腕骨は成人では長さが約[[30cm]]の[[長骨]]である",
+  "近位端の[[上腕骨頭]] → 肩甲骨[[関節窩]]と[[肩関節]]を形成",
+  "遠位端の[[上腕骨小頭]] → [[橈骨]]と関節を形成",
+  "[[上腕骨滑車]] → [[尺骨]]と関節を形成"
+ ],
+ note:"<b>整理のコツ：</b>上腕骨は「上で肩関節、下で肘関節」をつくる橋渡しの骨。遠位は<b>小頭＝橈骨（外側）／滑車＝尺骨（内側）</b>とペアで覚えると、8章Cの肘関節にそのままつながります。"},
+
+/* ---------- 2 関節 ---------- */
+{type:"p", eyebrow:"2 関節", title:"肩関節の基本（図8-17）",
+ items:[
+  "肩甲骨の[[関節窩]]と[[上腕骨頭]]で形成される[[球関節]]",
+  "運動の自由度は[[3]]度の[[多軸性]]関節",
+  "身体のなかで運動範囲が[[最も大きい]]"
+ ],
+ note:"<b>ここがポイント：</b>「関節窩は浅く、骨頭は大きい」という球関節。だから可動域は最大ですが、そのぶん<b>安定性を靱帯・関節唇・腱板で補う</b>必要があります。この後の内容はすべてこの補強の話です。"},
+
+{type:"p", eyebrow:"2 関節", title:"関節包と関節唇",
+ items:[
+  "<b>関節包</b>：肩甲骨の[[関節唇]]から上腕骨の[[解剖頸]]・[[大結節]]・[[小結節]]に至る[[緩い]]包",
+  "[[上腕二頭筋の長頭腱]]が両結節間（[[結節間溝]]）を通って[[関節腔内]]を通過する",
+  "<b>関節唇</b>：[[輪状]]の白色[[線維軟骨]]で、肩甲骨関節窩の[[辺縁]]にある",
+  "関節唇の役割<ul><li>関節窩の[[深み]]の増強</li><li>[[衝撃]]の緩衝</li></ul>"
+ ],
+ note:"<b>ここがポイント：</b>関節包が「緩い」＝大きく動ける理由。一方で関節唇が縁にリングとしてつき、浅い受け皿を深くしています。"},
+
+{type:"p", eyebrow:"2 関節", title:"肩関節の靱帯（図8-3・8-17）",
+ lead:"肩関節の[[前壁]]を補強する3つの靱帯があります。",
+ items:[
+  "[[烏口上腕靱帯]]　……　肩関節で[[最も重要]]",
+  "[[関節上腕靱帯]]",
+  "[[烏口肩峰靱帯]]　……　肩関節の運動には[[直接関与しない]]"
+ ],
+ note:"<b>国試ポイント：</b>3つのうち<b>最も重要＝烏口上腕靱帯</b>、<b>運動に直接関与しない＝烏口肩峰靱帯</b>。この2つの「肩書き」がそのまま問われます。"},
+
+{type:"p", eyebrow:"2 関節", title:"肩関節周囲の筋の配置",
+ lead:"肩関節の運動に関与する筋を、関節に対する位置で整理します（図8-6・8-7）。",
+ items:[
+  "上面：[[三角筋]]、[[棘上筋]]、[[上腕二頭筋長頭]]",
+  "下面：[[上腕三頭筋長頭]]",
+  "前面：[[肩甲下筋]]、[[大胸筋]]、[[大円筋]]",
+  "後面：[[棘下筋]]、[[小円筋]]"
+ ]},
+
+{type:"p", eyebrow:"2 関節", title:"腱板（回旋筋腱板 rotator cuff）（図8-18）",
+ items:[
+  "[[肩甲下筋]]・[[棘上筋]]・[[棘下筋]]・[[小円筋]]の[[4]]筋",
+  "上腕骨の[[大結節]]・[[小結節]]に付着する部分でまとまって1つの[[合同腱]]を形成する",
+  "これを[[腱板]]（回旋筋腱板：rotator cuff）という",
+  "肩関節の[[安定性]]に役立っている",
+  "スポーツなどの肩関節の激しい運動で[[腱板損傷]]を起こしやすい"
+ ],
+ note:"<b>覚え方：</b>頭文字で「<b>SITS</b>」＝Supraspinatus（棘上筋）／Infraspinatus（棘下筋）／Teres minor（小円筋）／Subscapularis（肩甲下筋）。付着は<b>肩甲下筋だけが小結節</b>、残り3つは大結節です。"},
+
+/* ---------- 3 肩関節の運動 ---------- */
+{type:"tbl", eyebrow:"3 肩関節の運動", title:"運動軸と運動の関係",
+ lead:"肩関節は人体のなかで最も[[可動性のよい]]関節です。",
+ head:["運動軸","起こる運動"],
+ rows:[
+  ["[[水平前頭軸]]","[[屈曲]]（前方挙上）・[[伸展]]（後方挙上）"],
+  ["[[水平矢状軸]]","[[内転]]・[[外転]]（側方挙上）"],
+  ["[[垂直軸]]","[[水平屈曲]]・[[水平伸展]]"],
+  ["[[上腕骨の縦軸]]","[[内旋]]・[[外旋]]"]],
+ note:"<b>ここがポイント：</b>屈曲・伸展・内転・外転が複合すると<b>分回し運動</b>になります。<br>肩関節の運動は上腕骨頭と肩甲骨関節窩のあいだの運動ですが、多くの場合<b>上肢帯（肩甲骨・鎖骨）の運動を伴います</b>。"},
+
+{type:"p", eyebrow:"3 肩関節の運動", title:"a. 屈曲・伸展にともなう肩甲骨・鎖骨の動き",
+ items:[
+  "<b>肩甲骨</b><ul><li>屈曲[[60°]]以上になると、[[2°]]屈曲するごとに肩甲骨は[[1°]]ずつ[[上方回旋]]する</li><li>伸展では[[下方回旋]]し、同時に[[内方移動]]・[[前傾]]運動を伴う</li></ul>",
+  "<b>鎖骨</b><ul><li>胸鎖関節での鎖骨の[[前方移動]]は、肩関節屈曲[[90°]]のときに最高となる</li><li>基本肢位から約[[36°]]前方に移動する</li><li>さらに屈曲すると、前方に移動していた鎖骨は[[後方]]に移動してもとに戻る</li><li>肩鎖関節での鎖骨の運動は、肩関節屈曲[[初期]]に若干の運動を伴う</li></ul>"
+ ],
+ note:"<b>イメージで理解：</b>屈曲60°までは肩関節だけで動き、そこから先は肩甲骨が「2：1」で加勢します。鎖骨は90°で前方移動がピークになり、その後は後方へ戻る——という<b>山なりの動き</b>をします。"},
+
+{type:"p", eyebrow:"3 肩関節の運動", title:"b. 外転・内転　—　上腕骨の動き",
+ items:[
+  "外転[[120°]]で[[大結節]]が[[肩峰]]にあたる",
+  "そのため[[90°]]以上になると上腕骨の[[外旋]]を伴い、[[小結節]]が肩峰に面する"
+ ],
+ note:"<b>ここがポイント：</b>外旋しないと大結節が肩峰にぶつかって、それ以上上がりません。腕を真上に挙げるときに自然と手のひらが前を向くのはこのためです。"},
+
+{type:"p", eyebrow:"3 肩関節の運動", title:"b. 外転・内転　—　肩甲上腕リズム",
+ items:[
+  "基本肢位から[[180°]]外転すると<ul><li>肩関節自体で[[120°]]外転</li><li>肩甲骨は[[60°]]上方回旋</li></ul>",
+  "かつては外転運動の初期に肩甲骨の運動は起こらないという意見もあった",
+  "現在は[[機能的X線像]]による測定で、[[外転初期]]から肩甲骨の運動を伴うことが明らかにされた",
+  "上腕骨の外転[[3°]]のうち<ul><li>肩関節が[[2°]]外転</li><li>肩甲骨が[[1°]]上方回旋</li></ul>",
+  "この[[2：1]]の比率で外転運動が行われる現象を[[肩甲上腕リズム]]という"
+ ],
+ note:"<b>国試最頻出：</b>「180°＝120°＋60°」「比率は2：1」。この2つの数字セットは必ず答えられるようにしましょう。"},
+
+/* ---------- 4 肩関節の筋 ---------- */
+{type:"two", eyebrow:"4 肩関節の筋", title:"筋の区分①　関節に対する位置（図8-6・8-7）",
+ left:{h:"上・前", items:[
+   "上：[[三角筋中部]]、[[棘上筋]]",
+   "前：[[三角筋前部]]、[[大胸筋]]、[[烏口腕筋]]、[[肩甲下筋]]、[[上腕二頭筋]]"]},
+ right:{h:"後", items:[
+   "[[三角筋後部]]、[[棘下筋]]、[[小円筋]]",
+   "[[大円筋]]、[[広背筋]]、[[上腕三頭筋長頭]]"]},
+ note:"<b>整理のコツ：</b>前にある筋＝<b>内旋・屈曲</b>系、後ろにある筋＝<b>外旋・伸展</b>系。位置と作用を対応させると、作用の暗記量が一気に減ります。"},
+
+{type:"tbl", eyebrow:"4 肩関節の筋", title:"筋の区分②　付着部による分類",
+ head:["付着部","筋"],
+ rows:[
+  ["[[胸郭]]－上腕骨","[[大胸筋]]、[[広背筋]]"],
+  ["[[肩甲骨]]－上腕骨","[[棘上筋]]、[[棘下筋]]、[[肩甲下筋]]、[[小円筋]]、[[大円筋]]、[[烏口腕筋]]、[[三角筋]]"],
+  ["[[肩甲骨]]－前腕骨","[[上腕二頭筋]]、[[上腕三頭筋]]"]],
+ note:"<b>ここがポイント：</b>肩甲骨－前腕骨に着く2筋（上腕二頭筋・上腕三頭筋）は<b>肩と肘の2関節をまたぐ二関節筋</b>。だから肩の動きにも肘の動きにも関わります。"},
+
+{type:"tbl", eyebrow:"4 肩関節の筋", title:"表8-3 肩関節の筋 ①起始・停止",
+ head:["筋","起始","停止"],
+ rows:[
+  ["三角筋","[[肩甲棘]]、[[肩峰]]、鎖骨外側部[[1/3]]","上腕骨[[中央外側部]]"],
+  ["棘上筋","[[棘上窩]]、棘上筋膜内面","上腕骨[[大結節]]上部"],
+  ["大胸筋","鎖骨内側[[2/3]]、胸骨前面、第1〜6肋骨、腹直筋鞘前葉","上腕骨[[大結節稜]]"],
+  ["烏口腕筋","肩甲骨[[烏口突起]]","上腕骨[[内側面]]"],
+  ["肩甲下筋","肩甲骨肋骨面（[[肩甲下窩]]）","上腕骨[[小結節]]"],
+  ["広背筋","[[T7]]以下の棘突起、下位肋骨、腸骨稜","上腕骨[[小結節稜]]"],
+  ["大円筋","肩甲骨[[下角]]","上腕骨[[小結節稜]]"],
+  ["棘下筋","肩甲骨[[棘下窩]]","上腕骨[[大結節]]"],
+  ["小円筋","肩甲骨[[外側縁]]上部[[1/2]]","上腕骨[[大結節]]"]],
+ note:"<b>停止で仕分け：</b>大結節＝棘上筋・棘下筋・小円筋（＋大胸筋は大結節<b>稜</b>）／小結節＝肩甲下筋（＋広背筋・大円筋は小結節<b>稜</b>）。<b>「稜」がつくかどうか</b>まで見るのが得点のコツです。"},
+
+{type:"tbl", eyebrow:"4 肩関節の筋", title:"表8-3 肩関節の筋 ②神経支配・作用",
+ head:["筋","神経支配","作用"],
+ rows:[
+  ["三角筋","[[腋窩神経]]（C5〜C6）","前部：[[屈曲]]／中部：[[外転]]／後部：[[伸展]]・[[水平伸展]]<br>全体として[[外転]]"],
+  ["棘上筋","[[肩甲上神経]]（C5）","[[外転]]"],
+  ["大胸筋","内側・外側[[胸筋神経]]（前胸神経）（C5〜T1）","鎖骨部：[[水平屈曲]]・[[内旋]]<br>胸腹部：[[内転]]・[[水平屈曲]]・[[内旋]]"],
+  ["烏口腕筋","[[筋皮神経]]（C6〜C7）","[[屈曲]]"],
+  ["肩甲下筋","[[肩甲下神経]]（C5〜C7）","[[内旋]]"],
+  ["広背筋","[[胸背神経]]（C6〜C8）","[[伸展]]・[[内転]]・[[内旋]]"],
+  ["大円筋","[[肩甲下神経]]（C5〜C7）","[[伸展]]・[[内転]]・[[内旋]]"],
+  ["棘下筋","[[肩甲上神経]]（C5〜C6）","[[外旋]]"],
+  ["小円筋","[[腋窩神経]]（C5〜C6）","[[外旋]]"]],
+ note:"<b>神経で整理：</b>腋窩神経＝三角筋・小円筋／肩甲上神経＝棘上筋・棘下筋／肩甲下神経＝肩甲下筋・大円筋。<b>腱板4筋の神経は「肩甲上・肩甲下・腋窩」の3つ</b>に収まります。"},
+
+{type:"mtx", eyebrow:"4 肩関節の筋", title:"表8-4 肩関節の筋活動と関節運動",
+ lead:"○＝主に働く筋（動筋 prime mover）／△＝補助的に働く筋（補助動筋 assistant mover）",
+ head:["筋","屈曲","伸展","外転","内転","外旋","内旋","水平屈曲","水平伸展"],
+ rows:[
+  ["三角筋前部","○","","","","","△","○",""],
+  ["三角筋中部","","","○","","","","","○"],
+  ["三角筋後部","","○","","","△","","","○"],
+  ["棘上筋","","","○","","","","",""],
+  ["大胸筋鎖骨部","○","","","△","","△","○",""],
+  ["大胸筋胸腹部","","","","○","","△","○",""],
+  ["烏口腕筋","△","","","△","","","○",""],
+  ["肩甲下筋","","","","△","","○","○",""],
+  ["広背筋","","○","","○","","△","","△"],
+  ["大円筋","","○","","○","","○","","△"],
+  ["棘下筋","","","","","○","","","○"],
+  ["小円筋","","","","","○","","","○"],
+  ["上腕二頭筋長頭","","","△","","","","",""],
+  ["上腕二頭筋短頭","△","","","△","","","",""],
+  ["上腕三頭筋長頭","","△","","△","","","",""]],
+ note:"<b>表の読み方：</b>これらの表は、重力などの外力を無視した状態で筋が収縮（短縮）したときに起こる関節運動を示しています。<br><b>縦に見る</b>のがコツ。たとえば「外旋」の列に○がつくのは<b>棘下筋と小円筋の2つだけ</b>——こう読めると選択肢がすぐ切れます。"},
+
+/* ---------- 各筋の詳細 ---------- */
+{type:"p", eyebrow:"筋の各論 ①", title:"三角筋（図8-19）",
+ items:[
+  "肩関節をおおっている大きな筋で、肩の[[丸み]]を形成し、皮下に[[その全体]]を触れる",
+  "部位と作用から[[前部]]・[[中部]]・[[後部]]の3つに区分する",
+  "三角筋は肩関節の[[すべての運動]]に関与する",
+  "多くの運動では[[僧帽筋]]が肩甲骨の[[固定筋]]として働き、三角筋の収縮力が上腕骨に作用する"
+ ],
+ note:"<b>8章Aとつながる：</b>僧帽筋が肩甲骨を固定するからこそ、三角筋の力が上腕骨に伝わります。「動かす筋」と「固定する筋」はいつもセットです。"},
+
+{type:"p", eyebrow:"筋の各論 ①", title:"筋の習慣的機能の転倒（図8-20）",
+ lead:"三角筋の[[表面筋電図]]からわかる、大切な現象です。",
+ items:[
+  "[[45°]]外転位から軽い抵抗をかけた[[内転]]を行うと → [[前部]]と[[後部]]に弱い収縮がみられる",
+  "[[135°]]外転位からさらに[[外転]]すると → [[中部]]の強い収縮とともに、やはり[[前部]]と[[後部]]にも収縮が起こる",
+  "このように同一の筋であっても[[肢位]]によって[[内転]]と[[外転]]の相反する機能をもつことを、筋の[[習慣的機能の転倒]]という",
+  "これは筋の[[走行]]と[[運動軸]]の関係が[[逆転]]して起こる現象である"
+ ],
+ note:"<b>イメージで理解：</b>運動軸より上を通れば外転、下を通れば内転。腕を挙げていくと筋の走行が軸をまたぐため、<b>同じ筋の作用が途中でひっくり返ります</b>。あとで出てくる大胸筋も同じ現象を起こします。"},
+
+{type:"p", eyebrow:"筋の各論 ②", title:"棘上筋（図8-21）",
+ items:[
+  "深部にあって[[三角筋]]におおわれ、表面からは[[触れることはできない]]",
+  "[[純粋]]の肩関節[[外転]]筋で、[[三角筋中部]]とともに働く",
+  "外転力そのものは[[弱く]]、むしろ[[骨頭]]を[[関節窩]]に引き付け、[[固定]]する作用の方が重要である"
+ ],
+ note:"<b>ここがポイント：</b>棘上筋は「腕を挙げる筋」というより<b>「骨頭を受け皿に押さえておく筋」</b>。腱板の一員としての安定化がいちばんの仕事です。"},
+
+{type:"p", eyebrow:"筋の各論 ③", title:"棘下筋・小円筋（図8-22）",
+ items:[
+  "両筋とも[[三角筋後部線維]]の[[深層]]にあるが、収縮を肩甲骨後表面・三角筋後部線維の[[内側下方]]に触れることができる",
+  "解剖学的には両筋は[[まったく別]]の筋であるが、筋の[[走行]]と[[作用]]は[[同一]]である",
+  "基本肢位で肩甲骨が固定されると、上腕骨頭を[[関節窩に引き付け]]ながらこれを[[外旋]]する",
+  "上腕骨[[水平屈曲位]]（前方挙上位）あるいは外転位から、[[水平伸展位]]方向への運動を起こす",
+  "外転位にある上腕骨を抵抗に抗して[[外旋]]しながら基本肢位に戻す働きもある",
+  "外旋筋として働くためには、[[菱形筋]]によって[[肩甲骨]]が固定されていることが前提となる"
+ ],
+ note:"<b>8章Aとつながる：</b>ここでも「土台の固定」が前提。菱形筋（上肢帯筋）が肩甲骨を止めてはじめて、棘下筋・小円筋が上腕骨を外旋できます。"},
+
+{type:"p", eyebrow:"筋の各論 ④", title:"肩甲下筋（図8-23）",
+ items:[
+  "肩甲骨の[[肋骨面]]にある筋で、体表からは[[腋窩]]で一部触れることができる",
+  "筋の走行は肩甲骨に関して、[[棘下筋]]・[[小円筋]]と[[対称]]の位置にある",
+  "上腕骨頭を[[下制]]しながら[[内旋]]する",
+  "[[水平伸展位]]（後方挙上位）あるいは外転位から[[水平屈曲]]方向の運動を起こす",
+  "外転位にある上腕骨を抵抗に抗して内旋しながら基本肢位に戻す<ul><li>このとき棘下筋・小円筋がともに働けば、[[内・外旋要素]]が中和されて[[内転運動]]だけが起こる</li></ul>",
+  "上腕骨頭を肩甲骨[[関節窩]]に押し付ける働きをする",
+  "内旋運動は[[広背筋]]や[[大円筋]]とともに働いて起こるが、肩甲下筋は[[停止]]が[[関節に近い]]部分にあるために力は[[弱い]]"
+ ],
+ note:"<b>8章Aとつながる：</b>「回旋成分が打ち消し合って純粋な運動が残る」という考え方は、前鋸筋と小胸筋（上肢帯）でも出てきました。<b>ペアで働くと回旋が中和される</b>——共通のパターンです。"},
+
+{type:"p", eyebrow:"筋の各論 ⑤", title:"烏口腕筋（図8-23）",
+ items:[
+  "[[上腕二頭筋]]の[[下内側]]にあり、[[触れることはできない]]",
+  "筋の走行が[[上腕骨とほぼ平行]]であるため、上腕骨頭を[[関節窩に押し付ける]]ことで肩関節の[[安定]]に役立っている"
+ ],
+ note:"<b>ここがポイント：</b>骨と平行に走る筋は、関節を「動かす」より「引き寄せて締める」働きになります。棘上筋と同じ発想です。"},
+
+{type:"p", eyebrow:"筋の各論 ⑥", title:"大円筋（図8-24）",
+ items:[
+  "[[後腋窩ヒダ]]を形成し、肩甲骨[[下角]]の斜め上外方に筋収縮を触れる",
+  "腋窩ヒダの構成<ul><li>前腋窩ヒダ：[[大胸筋]]</li><li>後腋窩ヒダ：[[大円筋]]・[[広背筋]]・[[上腕三頭筋長頭]]</li></ul>",
+  "上腕骨[[伸展]]：[[水平屈曲位]]（前方挙上位）にある上腕骨を基本肢位に引き下ろす",
+  "上腕骨[[内旋]]：上腕骨を[[内転]]しながら内旋する",
+  "上腕骨[[内転]]：外転位にある上腕骨を[[内旋]]しながら基本肢位に引き下ろす",
+  "有効に働くためには[[菱形筋]]によって肩甲骨が固定されていなければならない",
+  "[[広背筋]]とほぼ同様の働きをするが、その作用は[[弱い]]"
+ ],
+ note:"<b>触診でよく問われる：</b>前腋窩ヒダ＝大胸筋（1筋）／後腋窩ヒダ＝大円筋・広背筋・上腕三頭筋長頭（3筋）。<b>前は1つ、後ろは3つ</b>と数で覚えると便利です。"},
+
+{type:"p", eyebrow:"筋の各論 ⑦", title:"広背筋（図8-24）",
+ items:[
+  "[[後腋窩ヒダ]]を形成し、体幹[[後側部]]に[[広範囲]]に触れる",
+  "上腕骨[[伸展]]・[[内旋]]・[[内転]]作用は[[大円筋]]と同様である",
+  "上腕骨を介して肩関節の[[下方回旋]]と[[内転]]に強力な働きをする",
+  "上腕骨の[[伸展筋]]としても重要で、[[懸垂運動]]や[[平行棒歩行]]で働く"
+ ],
+ note:"<b>比べて覚える：</b>大円筋と広背筋は作用がそっくり。ちがいは<b>力の強さ（広背筋が強い・大円筋は弱い）</b>と、<b>神経（大円筋＝肩甲下神経／広背筋＝胸背神経）</b>です。"},
+
+{type:"p", eyebrow:"筋の各論 ⑧", title:"大胸筋（図8-25）",
+ items:[
+  "[[前腋窩ヒダ]]を形成し、前胸部の[[鎖骨]]から第[[6]]肋骨のあいだに筋収縮を触れる",
+  "[[鎖骨部]]：上腕骨[[屈曲]]・[[内旋]]・[[水平屈曲]]",
+  "[[胸腹部]]：上腕骨[[内転]]・[[内旋]]・[[水平屈曲]]",
+  "起始は[[鎖骨部]]・[[胸肋部]]・[[腹部]]の3部に分かれる<ul><li>腹部は比較的小規模で、それ自体で独自の働きはもたず[[胸肋部]]とともに作用する</li></ul>",
+  "鎖骨部は走行が[[三角筋前部]]と近似しており、働きも同様である",
+  "腕が[[水平よりも高く]]上がっているときは、運動軸と筋の走行の位置から筋の[[習慣的機能の転倒]]として[[外転]]作用をする",
+  "全体としては[[押し]]・[[投げ]]の動作、[[深呼吸]]時の胸郭挙上に働く",
+  "[[松葉杖歩行]]・[[平行棒歩行]]時は、[[体重]]を支える補助の働きがある"
+ ],
+ note:"<b>三角筋と同じ現象：</b>大胸筋も、腕が水平より高いところでは内転筋から外転筋に変わります。<b>「習慣的機能の転倒」は三角筋と大胸筋の2つで出てくる</b>と覚えておきましょう。"},
+
+/* ---------- まとめ ---------- */
+{type:"tbl", eyebrow:"まとめ", title:"重要数値の総整理",
+ lead:"数値問題はここから出ます。空欄で確認しましょう。",
+ head:["項目","数値"],
+ rows:[
+  ["上腕骨の長さ（成人）","約[[30cm]]"],
+  ["肩関節の運動の自由度","[[3]]度"],
+  ["腱板を構成する筋の数","[[4]]筋"],
+  ["肩関節前壁を補強する靱帯の数","[[3]]本"],
+  ["肩甲骨の上方回旋が始まる屈曲角度","[[60°]]以上"],
+  ["屈曲時の肩甲骨上方回旋の比率","屈曲[[2°]]につき[[1°]]"],
+  ["鎖骨の前方移動が最大になる屈曲角度","[[90°]]"],
+  ["そのときの鎖骨の前方移動","約[[36°]]"],
+  ["大結節が肩峰にあたる外転角度","[[120°]]"],
+  ["上腕骨外旋を伴い始める外転角度","[[90°]]以上"],
+  ["外転180°の内訳","肩関節[[120°]]＋肩甲骨上方回旋[[60°]]"],
+  ["肩甲上腕リズムの比率","[[2：1]]"]],
+ note:"<b>※</b>関節可動域は年齢・性別・運動歴などにより個人差があり、「正常関節可動域」という概念はありません。本章の数値はすべて<b>参考関節可動域</b>です（8章A脚注）。"},
+
+{type:"two", eyebrow:"まとめ", title:"運動方向別・主に働く筋（動筋）",
+ lead:"表8-4で○がついた筋だけを抜き出したものです。",
+ left:{h:"基本の6運動", items:[
+   "屈曲：[[三角筋前部]]・[[大胸筋鎖骨部]]",
+   "伸展：[[三角筋後部]]・[[広背筋]]・[[大円筋]]",
+   "外転：[[三角筋中部]]・[[棘上筋]]",
+   "内転：[[大胸筋胸腹部]]・[[広背筋]]・[[大円筋]]",
+   "外旋：[[棘下筋]]・[[小円筋]]",
+   "内旋：[[肩甲下筋]]・[[大円筋]]"]},
+ right:{h:"水平面の運動", items:[
+   "水平屈曲：[[三角筋前部]]・[[大胸筋]]（鎖骨部・胸腹部）・[[烏口腕筋]]・[[肩甲下筋]]",
+   "水平伸展：[[三角筋中部]]・[[三角筋後部]]・[[棘下筋]]・[[小円筋]]"]},
+ note:"<b>最後の確認：</b>外旋の動筋は<b>棘下筋・小円筋の2つだけ</b>。腱板4筋のうち、外旋2つ（棘下筋・小円筋）／内旋1つ（肩甲下筋）／外転1つ（棘上筋）と整理できます。"}
+
+];
+
+/* ============================================================
+   描画・操作
+   ============================================================ */
+const slideEl=document.getElementById('slide');
+const dotsEl=document.getElementById('dots');
+let idx=0;
+
+function blanks(t){
+  return String(t).replace(/\[\[(.+?)\]\]/g,(m,a)=>
+    `<span class="blank" tabindex="0" role="button" aria-label="空欄">${a}</span>`);
+}
+const li=arr=>arr.map(t=>`<li>${blanks(t)}</li>`).join('');
+
+function render(){
+  const s=SLIDES[idx];
+  let h='';
+
+  if(s.type==='cover'){
+    h=`<div class="cover">
+        <div class="sub">${s.sub}</div>
+        <h1>${s.title}</h1>
+        <div class="en">${s.en}</div>
+        <div class="idx">${s.index.join('<br>')}</div>
+       </div>`;
+  } else {
+    h+=`<div class="eyebrow">${s.eyebrow}</div><h2>${s.title}</h2>`;
+    if(s.lead) h+=`<p style="margin-bottom:14px;line-height:1.85;font-size:15.5px;">${blanks(s.lead)}</p>`;
+
+    if(s.type==='p'){
+      h+=`<ul>${li(s.items)}</ul>`;
+    } else if(s.type==='tbl'){
+      h+=`<div class="tblwrap"><table><thead><tr>${
+        s.head.map(x=>`<th>${x}</th>`).join('')}</tr></thead><tbody>${
+        s.rows.map(r=>`<tr>${r.map(c=>`<td>${blanks(c)}</td>`).join('')}</tr>`).join('')
+      }</tbody></table></div>`;
+    } else if(s.type==='mtx'){
+      h+=`<div class="tblwrap"><table class="matrix"><thead><tr>${
+        s.head.map(x=>`<th>${x}</th>`).join('')}</tr></thead><tbody>${
+        s.rows.map(r=>`<tr>${r.map((c,i)=>
+          `<td>${i===0?c:(c?blanks('[['+c+']]'):'')}</td>`).join('')}</tr>`).join('')
+      }</tbody></table></div>`;
+    } else if(s.type==='two'){
+      h+=`<div class="two">
+            <div class="col"><h4>${s.left.h}</h4><div class="body"><ul>${li(s.left.items)}</ul></div></div>
+            <div class="col alt"><h4>${s.right.h}</h4><div class="body"><ul>${li(s.right.items)}</ul></div></div>
+          </div>`;
+    }
+    if(s.note) h+=`<div class="note">${s.note}</div>`;
+  }
+
+  slideEl.innerHTML=h;
+  document.getElementById('cur').textContent=idx+1;
+  [...dotsEl.children].forEach((d,i)=>d.classList.toggle('active',i===idx));
+  document.getElementById('prev').disabled=(idx===0);
+  document.getElementById('next').disabled=(idx===SLIDES.length-1);
+  slideEl.querySelectorAll('.blank').forEach(b=>{
+    b.addEventListener('click',()=>b.classList.add('open'));
+    b.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();b.classList.add('open');}});
+  });
+  window.scrollTo({top:0,behavior:'instant'});
+}
+
+document.getElementById('tot').textContent=SLIDES.length;
+SLIDES.forEach((_,i)=>{
+  const b=document.createElement('button');
+  b.className='dot'; b.setAttribute('aria-label',`スライド${i+1}`);
+  b.onclick=()=>{idx=i;render();};
+  dotsEl.appendChild(b);
+});
+
+document.getElementById('prev').onclick=()=>{if(idx>0){idx--;render();}};
+document.getElementById('next').onclick=()=>{if(idx<SLIDES.length-1){idx++;render();}};
+document.getElementById('btnNext').onclick=()=>{
+  const b=slideEl.querySelector('.blank:not(.open)');
+  if(b){b.classList.add('open','hint'); setTimeout(()=>b.classList.remove('hint'),900);
+        b.scrollIntoView({block:'center',behavior:'smooth'});}
+};
+document.getElementById('btnAll').onclick=()=>
+  slideEl.querySelectorAll('.blank').forEach(b=>b.classList.add('open'));
+document.getElementById('btnReset').onclick=()=>
+  slideEl.querySelectorAll('.blank').forEach(b=>b.classList.remove('open'));
+
+document.addEventListener('keydown',e=>{
+  if(e.target.classList.contains('blank'))return;
+  if(e.key==='ArrowRight'&&idx<SLIDES.length-1){idx++;render();}
+  if(e.key==='ArrowLeft'&&idx>0){idx--;render();}
+});
+
+render();
+</script>
+</body>
+</html>
