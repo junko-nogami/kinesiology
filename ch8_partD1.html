@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>運動学 第8章D-1 手関節と手の運動（構造）</title>
+<style>
+:root{
+  --main:#7a2a3a; --main-dark:#5a1c28; --main-light:#a8556a; --accent:#c8a24a;
+  --bg:#f7f4f2; --card:#ffffff; --text:#2c2724; --sub:#6b625e; --line:#e2d9d5;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;}
+body{font-family:"Hiragino Kaku Gothic ProN","Yu Gothic","Meiryo",sans-serif;background:var(--bg);color:var(--text);display:flex;flex-direction:column;min-height:100vh;-webkit-text-size-adjust:100%;}
+header{background:var(--main);color:#fff;padding:10px 16px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:20;}
+header .ch{font-size:12px;letter-spacing:.12em;opacity:.85;}
+header .ttl{font-size:15px;font-weight:700;}
+header .count{margin-left:auto;font-size:13px;font-variant-numeric:tabular-nums;opacity:.9;}
+main{flex:1;display:flex;justify-content:center;padding:18px 14px 8px;}
+.slide{width:100%;max-width:860px;background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:0 2px 10px rgba(0,0,0,.05);padding:26px 28px 30px;animation:fade .25s ease;}
+@keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+@media (prefers-reduced-motion:reduce){.slide{animation:none;}}
+.eyebrow{display:inline-block;font-size:11px;letter-spacing:.14em;color:var(--main);background:#f3e9eb;border-radius:20px;padding:4px 12px;margin-bottom:12px;font-weight:700;}
+h2{font-size:23px;line-height:1.4;color:var(--main-dark);border-bottom:3px solid var(--main);padding-bottom:9px;margin-bottom:18px;}
+ul{list-style:none;}
+li{position:relative;padding-left:20px;margin-bottom:11px;line-height:1.85;font-size:16px;}
+li::before{content:"";position:absolute;left:2px;top:.72em;width:8px;height:8px;border-radius:2px;background:var(--main-light);}
+li ul{margin-top:8px;}
+li li{font-size:15px;color:var(--sub);margin-bottom:6px;}
+li li::before{background:var(--line);width:6px;height:6px;top:.75em;}
+.note{margin-top:16px;padding:11px 14px;font-size:13.5px;line-height:1.75;background:#faf6ee;border-left:4px solid var(--accent);border-radius:0 6px 6px 0;color:#5c4f38;}
+.note b{color:#8a6a20;}
+.tblwrap{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:14.5px;}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left;line-height:1.7;vertical-align:top;}
+th{background:var(--main);color:#fff;font-weight:700;white-space:nowrap;}
+tbody tr:nth-child(even){background:#faf7f7;}
+table.matrix{min-width:900px;font-size:12.5px;text-align:center;}
+table.matrix td{text-align:center;padding:5px 2px;}
+table.matrix td:first-child{text-align:left;white-space:nowrap;font-weight:700;background:#f7f1f2;padding:5px 8px;}
+table.matrix th{padding:6px 2px;text-align:center;font-size:11.5px;}
+table.matrix th.grp{background:var(--main-dark);}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.col{border:1px solid var(--line);border-radius:10px;overflow:hidden;}
+.col h4{background:var(--main);color:#fff;font-size:15px;padding:9px 12px;}
+.col.alt h4{background:var(--main-light);}
+.col .body{padding:12px 14px;}
+.col li{font-size:15px;margin-bottom:9px;}
+@media(max-width:640px){.two{grid-template-columns:1fr;}}
+.blank{display:inline-block;min-width:4.2em;text-align:center;padding:1px 8px;margin:0 1px;cursor:pointer;user-select:none;background:#f0e6e8;color:transparent;border-bottom:2px dashed var(--main-light);border-radius:4px;transition:background .15s,color .15s;}
+.blank:hover{background:#e5d5d9;}
+.blank:focus-visible{outline:3px solid var(--accent);outline-offset:2px;}
+.blank.open{background:transparent;color:var(--main-dark);font-weight:700;border-bottom:2px solid var(--accent);cursor:default;}
+.blank.hint{animation:pulse .9s ease;}
+@keyframes pulse{0%,100%{background:#f0e6e8;}50%{background:var(--accent);}}
+@media (prefers-reduced-motion:reduce){.blank.hint{animation:none;}}
+table.matrix .blank{min-width:2em;padding:1px 3px;}
+.cover{text-align:center;padding:48px 20px;}
+.cover .sub{font-size:14px;letter-spacing:.2em;color:var(--main-light);margin-bottom:14px;}
+.cover h1{font-size:32px;color:var(--main-dark);line-height:1.4;margin-bottom:10px;}
+.cover .en{font-size:13px;color:var(--sub);letter-spacing:.08em;margin-bottom:26px;}
+.cover .idx{display:inline-block;text-align:left;background:#faf7f7;border:1px solid var(--line);border-radius:10px;padding:16px 22px;font-size:15px;line-height:2;}
+.cover .idx b{color:var(--main);}
+footer{position:sticky;bottom:0;background:var(--bg);border-top:1px solid var(--line);padding:10px 14px 14px;}
+.tools{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:10px;}
+.tools button{font-family:inherit;font-size:13.5px;font-weight:700;cursor:pointer;border:1.5px solid var(--main);background:#fff;color:var(--main);padding:8px 15px;border-radius:22px;transition:.15s;}
+.tools button:hover{background:var(--main);color:#fff;}
+.tools button.primary{background:var(--main);color:#fff;}
+.tools button.primary:hover{background:var(--main-dark);border-color:var(--main-dark);}
+.tools button:focus-visible{outline:3px solid var(--accent);outline-offset:2px;}
+.nav{display:flex;align-items:center;justify-content:center;gap:14px;}
+.nav button{font-family:inherit;font-size:15px;cursor:pointer;border:none;background:var(--main);color:#fff;width:40px;height:40px;border-radius:50%;}
+.nav button:disabled{background:#cfc5c2;cursor:default;}
+.dots{display:flex;gap:5px;flex-wrap:wrap;justify-content:center;max-width:520px;}
+.dot{width:9px;height:9px;border-radius:50%;background:#d5cac7;border:none;padding:0;cursor:pointer;}
+.dot.active{background:var(--main);transform:scale(1.35);}
+.dot:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <div class="ch">運動学 CHAPTER 8 D-1</div>
+    <div class="ttl">手関節と手の運動 ①構造</div>
+  </div>
+  <div class="count"><span id="cur">1</span> / <span id="tot">1</span></div>
+</header>
+<main><div class="slide" id="slide"></div></main>
+<footer>
+  <div class="tools">
+    <button id="btnNext" class="primary">次のカッコを開く</button>
+    <button id="btnAll">すべて表示</button>
+    <button id="btnReset">リセット</button>
+  </div>
+  <div class="nav">
+    <button id="prev" aria-label="前のスライド">◀</button>
+    <div class="dots" id="dots"></div>
+    <button id="next" aria-label="次のスライド">▶</button>
+  </div>
+</footer>
+<script>
+const SLIDES = [
+
+{type:"cover", title:"手関節と手の運動①　構造", en:"Structure of the Wrist and Hand",
+ sub:"第8章 四肢と体幹の運動 D",
+ index:["<b>1.</b> 骨格（手根骨・中手骨・指骨）","<b>2.</b> 関節（9種類）","<b>3.</b> 手の皮膚","<b>4.</b> 屈筋支帯・伸筋支帯","<b>5.</b> 腱鞘・指背腱膜"]},
+
+/* ---------- 1 骨格 ---------- */
+{type:"p", eyebrow:"1 骨格", title:"前腕骨と手根骨（図8-37）",
+ items:[
+  "<b>前腕骨</b>：[[橈骨]]、[[尺骨]]",
+  "<b>近位手根骨</b>（橈側から）<ul><li>[[舟状骨]]・[[月状骨]]・[[三角骨]]・[[豆状骨]]</li></ul>",
+  "<b>遠位手根骨</b>（橈側から）<ul><li>[[大菱形骨]]・[[小菱形骨]]・[[有頭骨]]・[[有鉤骨]]</li></ul>"
+ ],
+ note:"<b>覚え方：</b>近位列「<b>舟・月・三・豆</b>」、遠位列「<b>大・小・頭・鉤</b>」。どちらも<b>橈側（母指側）から尺側へ</b>並べるのが基本。手根骨は8個です。"},
+
+{type:"p", eyebrow:"1 骨格", title:"手根溝と手根管（図8-38）",
+ items:[
+  "手根骨は全体として[[掌側]]に[[凹]]となって[[手根溝]]を形成する",
+  "これと[[屈筋支帯]]で囲まれた部分を[[手根管]]という"
+ ],
+ note:"<b>ここがポイント：</b>手根管の「床と壁」が手根骨、「天井（ふた）」が屈筋支帯。この閉じた空間で内容物が圧迫されるのが手根管症候群です。"},
+
+{type:"p", eyebrow:"1 骨格", title:"中手骨と指骨",
+ items:[
+  "<b>中手骨</b>：[[母指]]側から第[[1]]〜第[[5]]中手骨",
+  "<b>指骨</b><ul><li>母指：[[基節骨]]と[[末節骨]]</li><li>他の4指：[[基節骨]]・[[中節骨]]・[[末節骨]]</li></ul>",
+  "指骨は合計[[14]]個の骨からなる"
+ ],
+ note:"<b>計算で確認：</b>母指2個＋（他4指×3個＝12個）＝14個。母指だけ中節骨がないので、母指のIP関節は1つだけになります。"},
+
+/* ---------- 2 関節 ---------- */
+{type:"p", eyebrow:"2 関節", title:"橈骨手根関節（手関節）",
+ items:[
+  "[[橈骨下端]]と尺側に続く[[関節円板]]が、[[舟状骨]]・[[月状骨]]・[[三角骨]]と相対する[[楕円関節]]である",
+  "[[尺骨]]は手根骨と[[直接には関節をつくらない]]",
+  "靱帯：[[背側]]・[[掌側橈骨手根靱帯]]、[[掌側尺骨手根靱帯]]"
+ ],
+ note:"<b>国試頻出：</b>「手関節＝橈骨手根関節」で、<b>尺骨は関節に参加しない</b>（間に関節円板が入る）。ここが必ず問われます。関節の型は<b>楕円関節（顆状関節）</b>。"},
+
+{type:"tbl", eyebrow:"2 関節", title:"手根部の関節",
+ head:["関節","構成","型・特徴","靱帯"],
+ rows:[
+  ["[[手根間関節]]","[[近位]]および[[遠位]]手根骨間","[[複関節]]で、わずかの間隙を有する変形した[[半関節]]","[[骨間]]・[[背側]]・[[掌側手根間靱帯]]、[[放線状手根靱帯]]"],
+  ["[[手根中央関節]]","[[近位]]と[[遠位]]手根骨列間","[[手根間関節]]の一部","—"],
+  ["[[豆状骨関節]]","[[三角骨]]と[[豆状骨]]間","—","[[豆鉤靱帯]]"]],
+ note:"<b>整理のコツ：</b>「手根間関節」は手根骨どうしの関節すべて、そのうち<b>近位列と遠位列のあいだ</b>が「手根中央関節」。掌背屈の可動域を稼ぐ重要な関節です。"},
+
+{type:"p", eyebrow:"2 関節", title:"手根中手関節（CM関節）",
+ items:[
+  "[[遠位手根骨]]と第[[2]]〜[[5]]中手骨間の、変形した[[鞍関節]]である",
+  "連結のしかた<ul><li>第2中手骨 ── [[大]]・[[小菱形骨]]と[[有頭骨]]</li><li>第3中手骨 ── [[有頭骨]]</li><li>第4中手骨 ── [[有頭骨]]と[[有鉤骨]]</li><li>第5中手骨 ── [[有鉤骨]]</li></ul>",
+  "靱帯：[[背側]]・[[掌側手根中手靱帯]]、[[豆中手靱帯]]",
+  "<b>母指の手根中手関節</b>：第[[1]]中手骨と[[大菱形骨]]からなる[[鞍関節]]"
+ ],
+ note:"<b>ここがポイント：</b>母指のCM関節だけが独立した<b>典型的な鞍関節</b>。だから母指は他の4指と向かい合う「対立」ができ、ヒトの手の機能を決定づけています。"},
+
+{type:"tbl", eyebrow:"2 関節", title:"中手間関節・MP関節・IP関節",
+ head:["関節","構成","型","靱帯"],
+ rows:[
+  ["[[中手間関節]]","第2〜第5中手骨の相互に向かい合う面","いずれも[[平面関節]]","[[背側]]・[[掌側]]・[[骨間中手靱帯]]"],
+  ["[[中手指節関節]]<br>（MP関節・MCP関節）","中手骨とそれぞれの指の[[基節骨]]間","[[顆状関節]]","[[橈側]]・[[尺側側副靱帯]]、[[掌側靱帯]]、[[深横中手靱帯]]"],
+  ["[[指節間関節]]<br>（IP関節）","母指：[[基節骨]]と[[末節骨]]<br>第2〜第5指：基節骨と中節骨（[[PIP]]）、中節骨と末節骨（[[DIP]]）","いずれも[[蝶番関節]]","[[橈側]]・[[尺側側副靱帯]]"]],
+ note:"<b>比べて覚える：</b>MP関節は<b>顆状関節</b>だから屈伸に加えて外転・内転もできる。IP関節は<b>蝶番関節</b>だから屈伸だけ。この型の違いが、そのまま運動の自由度の違いになります。"},
+
+/* ---------- 3 手の皮膚 ---------- */
+{type:"two", eyebrow:"3 手の皮膚", title:"手掌と手背のちがい",
+ left:{h:"手掌", items:[
+   "表皮と皮下組織が[[密]]に結合",
+   "移動性が[[少ない]]",
+   "[[把握動作]]に適した構造"]},
+ right:{h:"手背", items:[
+   "表皮と皮下組織が[[粗]]に結合",
+   "移動性が[[大きい]]",
+   "把握動作時に[[抵抗が少ない]]構造"]},
+ note:"<b>ここがポイント：</b>「手掌は滑らないように密着、手背は曲げやすいようにゆるい」。だから手背は浮腫が出やすく、逆に手掌は腫れにくい——臨床所見の見方にもつながります。"},
+
+{type:"p", eyebrow:"3 手の皮膚", title:"手の感覚（図8-39）",
+ items:[
+  "[[手掌]]、とくに[[指尖]]には豊富な[[感覚受容器]]があり、[[鋭敏]]な感覚機能をもつ",
+  "手の感覚は[[正中神経]]・[[尺骨神経]]・[[橈骨神経]]の[[感覚枝]]が支配する"
+ ],
+ note:"<b>3神経の分担：</b>おおまかに、手掌の橈側＝正中神経／尺側＝尺骨神経／手背の橈側＝橈骨神経。しびれの部位から障害神経を推定する土台になります。"},
+
+/* ---------- 4 支帯 ---------- */
+{type:"p", eyebrow:"4 屈筋支帯・伸筋支帯", title:"屈筋支帯と手根管の内容（図8-40）",
+ items:[
+  "屈筋支帯は[[舟状骨]]と[[大菱形骨]]から、[[豆状骨]]と[[有鉤骨鉤]]に張る強い靱帯である",
+  "[[手根骨]]とともに[[手根管]]を形成する",
+  "<b>手根管内を通過するもの</b><ul><li>[[橈側手根屈筋]]の腱</li><li>[[長母指屈筋]]の腱</li><li>[[浅指屈筋]]の腱</li><li>[[深指屈筋]]の腱</li><li>[[正中神経]]</li></ul>"
+ ],
+ note:"<b>国試最頻出：</b>手根管を通るのは<b>4つの腱と正中神経</b>。「<b>尺側手根屈筋・長掌筋・尺骨神経は通らない</b>」が定番のひっかけです。"},
+
+{type:"tbl", eyebrow:"4 屈筋支帯・伸筋支帯", title:"伸筋支帯の6区画",
+ lead:"手関節[[背側]]にあり、橈骨・尺骨背面に伸筋腱を通す[[6]]区画の[[骨線維性トンネル]]を形成します（母指側から順に）。",
+ head:["区画","通る腱"],
+ rows:[
+  ["Ⅰ","[[長母指外転筋]]、[[短母指伸筋]]"],
+  ["Ⅱ","[[長橈側手根伸筋]]、[[短橈側手根伸筋]]"],
+  ["Ⅲ","[[長母指伸筋]]"],
+  ["Ⅳ","[[示指伸筋]]、[[指伸筋]]"],
+  ["Ⅴ","[[小指伸筋]]"],
+  ["Ⅵ","[[尺側手根伸筋]]"]],
+ note:"<b>順番の覚え方：</b>橈側（母指側）から数えてⅠ〜Ⅵ。Ⅰ区画は<b>ド・ケルバン腱鞘炎</b>、Ⅲ区画は<b>長母指伸筋腱断裂</b>の好発部位として臨床で頻出します。"},
+
+{type:"p", eyebrow:"4 屈筋支帯・伸筋支帯", title:"手掌腱膜",
+ items:[
+  "[[長掌筋腱]]の延長で、手関節から[[手掌の皮下]]に[[扇状]]にひろがる[[強靱]]な腱膜である",
+  "[[長掌筋]]の収縮で手根を[[掌屈]]し、[[手掌腱膜]]を[[緊張]]させる"
+ ],
+ note:"<b>つながる話：</b>長掌筋は手関節掌屈の力そのものは弱く、主な役目は<b>手掌腱膜を張ること</b>。手でものをすくう動作で働きます（D2の各論で再登場）。"},
+
+/* ---------- 5 腱鞘 ---------- */
+{type:"two", eyebrow:"5 腱鞘", title:"腱鞘の2種類（図8-41）",
+ left:{h:"線維鞘（靱帯性腱鞘）", items:[
+   "指屈筋の収縮で指の関節が屈曲するとき、関節部で腱が[[弓の弦]]のように[[浮き上がる]]のを防ぐ[[押さえ]]の働きをする",
+   "[[輪状部]]と[[十字部]]の2種がある",
+   "第1指の[[基節骨]]、第2〜第5指の[[中節骨]]と[[基節骨]]の[[屈側]]にある"]},
+ right:{h:"滑膜鞘（滑膜性腱鞘）", items:[
+   "腱を線維鞘のなかで[[滑らか]]に[[滑走]]させるための働きをする",
+   "滑膜鞘は線維鞘よりも[[広範囲]]に存在する"]},
+ note:"<b>役割分担：</b>線維鞘＝腱を骨に「押さえつける」／滑膜鞘＝腱を「滑らせる」。押さえと潤滑、2つセットで腱の滑走が成り立ちます。"},
+
+/* ---------- 6 指背腱膜 ---------- */
+{type:"p", eyebrow:"6 指背腱膜", title:"指背腱膜の構造（図8-42）",
+ items:[
+  "第[[2]]〜第[[5]]指で、[[指伸筋]]・[[虫様筋]]・[[骨間筋]]の[[遠位部]]の腱が[[薄い膜状]]になり、複雑に組み合わさって形成される",
+  "[[3筋相互]]の[[緊張]]がバランスを保ちつつ、指の[[肢位]]を制御する"
+ ],
+ note:"<b>ここがポイント：</b>指の運動は「1本の腱が1つの関節を動かす」のではなく、<b>3つの筋が編み込まれた膜の張力バランス</b>で決まります。だから1筋の障害が指全体の形を変えてしまいます。"},
+
+{type:"two", eyebrow:"6 指背腱膜", title:"指の完全伸展と完全屈曲",
+ left:{h:"指の完全伸展", items:[
+   "[[背側骨間筋]]の[[弛緩]]と[[指伸筋]]の[[緊張]] → [[MP関節]]を[[伸展]]",
+   "[[虫様筋]]と[[掌側骨間筋]]の[[緊張]] → [[IP関節]]を[[伸展]]"]},
+ right:{h:"指の完全屈曲", items:[
+   "[[背側骨間筋]]の[[緊張]]と[[指伸筋]]の[[弛緩]] → [[MP関節]]を[[屈曲]]",
+   "[[虫様筋]]と[[掌側骨間筋]]の[[弛緩]]と、[[深指屈筋]]・[[浅指屈筋]]の[[収縮]] → [[MP]]・[[IP]]関節を[[屈曲]]"]},
+ note:"<b>対で覚える：</b>同じ筋でも、緊張するか弛緩するかで結果が逆になります。左右の表を見比べて、<b>「どちらが張っているか」だけが違う</b>ことを確認しましょう。"},
+
+{type:"two", eyebrow:"6 指背腱膜", title:"筋バランスの不均衡による変形",
+ lead:"指背腱膜を構成する筋相互の[[緊張]]の[[不均衡]]で、手指に種々の変形をきたします。",
+ left:{h:"内在筋劣位手", items:[
+   "相対的に[[指伸筋]]の緊張が[[高い]]",
+   "[[MP関節伸展]]・[[IP関節屈曲]]の変形",
+   "[[正中神経]]・[[尺骨神経]]麻痺で起こる"]},
+ right:{h:"内在筋優位手", items:[
+   "相対的に[[虫様筋]]・[[骨間筋]]の緊張が[[高い]]",
+   "[[MP関節屈曲]]・[[IP関節伸展]]の変形",
+   "[[パーキンソン病]]などの[[錐体外路系]]疾患のとき（[[視床手]]）や[[関節リウマチ]]でみられる"]},
+ note:"<b>ちょうど正反対：</b>劣位手＝MP伸展＋IP屈曲、優位手＝MP屈曲＋IP伸展。<b>「どちらが勝っているか」で指の形が反転する</b>と理解すれば、丸暗記が不要になります。"},
+
+{type:"tbl", eyebrow:"6 指背腱膜", title:"指背腱膜のバランス障害（図8-43）",
+ head:["変形","原因"],
+ rows:[
+  ["[[鷲手]]変形","[[虫様筋]]・[[骨間筋]]の[[機能不全]]"],
+  ["[[内在筋優位手]]拘縮","同じ筋群の[[痙性麻痺]]、[[瘢痕拘縮]]"],
+  ["[[ボタン穴変形]]","[[中央索]]の[[断裂]]"],
+  ["[[槌指]]（[[マレット指]]）","[[指背腱膜付着部]]の[[断裂]]"],
+  ["[[スワンネック変形]]","[[内在筋群]]の相対的優位と[[PIP関節側副靱帯]][[弛緩]]の合併"]],
+ note:"<b>比べて覚える：</b><b>ボタン穴変形</b>＝PIP屈曲＋DIP伸展／<b>スワンネック変形</b>＝PIP伸展＋DIP屈曲。ちょうど逆の形です。また腱断裂によるものとして、スワンネック変形・ボタン穴変形などがあります。"},
+
+/* ---------- まとめ ---------- */
+{type:"tbl", eyebrow:"まとめ", title:"構造の総整理",
+ lead:"数と部位はここから出ます。空欄で確認しましょう。",
+ head:["項目","答え"],
+ rows:[
+  ["手根骨の数","[[8]]個（近位4＋遠位4）"],
+  ["指骨の数","[[14]]個"],
+  ["手関節（橈骨手根関節）の型","[[楕円関節]]"],
+  ["手関節に参加しない前腕骨","[[尺骨]]（間に[[関節円板]]）"],
+  ["母指CM関節の型","[[鞍関節]]"],
+  ["MP関節の型","[[顆状関節]]"],
+  ["IP関節の型","[[蝶番関節]]"],
+  ["手根管を通る腱と神経","[[橈側手根屈筋]]・[[長母指屈筋]]・[[浅指屈筋]]・[[深指屈筋]]の腱＋[[正中神経]]"],
+  ["伸筋支帯の区画数","[[6]]区画"],
+  ["指背腱膜を形成する3筋","[[指伸筋]]・[[虫様筋]]・[[骨間筋]]"]],
+ note:"次は<b>D2（運動と筋）</b>へ。ここで覚えた骨と関節の名前が、そのまま筋の起始・停止として出てきます。"}
+
+];
+</script>
+<script>
+const slideEl=document.getElementById('slide');
+const dotsEl=document.getElementById('dots');
+let idx=0;
+function blanks(t){return String(t).replace(/\[\[(.+?)\]\]/g,(m,a)=>`<span class="blank" tabindex="0" role="button" aria-label="空欄">${a}</span>`);}
+const li=arr=>arr.map(t=>`<li>${blanks(t)}</li>`).join('');
+function render(){
+  const s=SLIDES[idx];let h='';
+  if(s.type==='cover'){
+    h=`<div class="cover"><div class="sub">${s.sub}</div><h1>${s.title}</h1><div class="en">${s.en}</div><div class="idx">${s.index.join('<br>')}</div></div>`;
+  }else{
+    h+=`<div class="eyebrow">${s.eyebrow}</div><h2>${s.title}</h2>`;
+    if(s.lead) h+=`<p style="margin-bottom:14px;line-height:1.85;font-size:15.5px;">${blanks(s.lead)}</p>`;
+    if(s.type==='p'){h+=`<ul>${li(s.items)}</ul>`;}
+    else if(s.type==='tbl'){h+=`<div class="tblwrap"><table><thead><tr>${s.head.map(x=>`<th>${x}</th>`).join('')}</tr></thead><tbody>${s.rows.map(r=>`<tr>${r.map(c=>`<td>${blanks(c)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;}
+    else if(s.type==='mtx'){
+      let th1='';
+      if(s.groups){th1='<tr><th rowspan="2">筋</th>'+s.groups.map(g=>`<th class="grp" colspan="${g[1]}">${g[0]}</th>`).join('')+'</tr>';}
+      h+=`<div class="tblwrap"><table class="matrix"><thead>${th1}<tr>${s.head.map(x=>`<th>${x}</th>`).join('')}</tr></thead><tbody>${s.rows.map(r=>`<tr>${r.map((c,i)=>`<td>${i===0?c:(c?blanks('[['+c+']]'):'')}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;}
+    else if(s.type==='two'){
+      h+=`<div class="two"><div class="col"><h4>${s.left.h}</h4><div class="body"><ul>${li(s.left.items)}</ul></div></div><div class="col alt"><h4>${s.right.h}</h4><div class="body"><ul>${li(s.right.items)}</ul></div></div></div>`;}
+    if(s.note) h+=`<div class="note">${blanks(s.note)}</div>`;
+  }
+  slideEl.innerHTML=h;
+  document.getElementById('cur').textContent=idx+1;
+  [...dotsEl.children].forEach((d,i)=>d.classList.toggle('active',i===idx));
+  document.getElementById('prev').disabled=(idx===0);
+  document.getElementById('next').disabled=(idx===SLIDES.length-1);
+  slideEl.querySelectorAll('.blank').forEach(b=>{
+    b.addEventListener('click',()=>b.classList.add('open'));
+    b.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();b.classList.add('open');}});
+  });
+  window.scrollTo({top:0,behavior:'instant'});
+}
+document.getElementById('tot').textContent=SLIDES.length;
+SLIDES.forEach((_,i)=>{const b=document.createElement('button');b.className='dot';b.setAttribute('aria-label',`スライド${i+1}`);b.onclick=()=>{idx=i;render();};dotsEl.appendChild(b);});
+document.getElementById('prev').onclick=()=>{if(idx>0){idx--;render();}};
+document.getElementById('next').onclick=()=>{if(idx<SLIDES.length-1){idx++;render();}};
+document.getElementById('btnNext').onclick=()=>{const b=slideEl.querySelector('.blank:not(.open)');if(b){b.classList.add('open','hint');setTimeout(()=>b.classList.remove('hint'),900);b.scrollIntoView({block:'center',behavior:'smooth'});}};
+document.getElementById('btnAll').onclick=()=>slideEl.querySelectorAll('.blank').forEach(b=>b.classList.add('open'));
+document.getElementById('btnReset').onclick=()=>slideEl.querySelectorAll('.blank').forEach(b=>b.classList.remove('open'));
+document.addEventListener('keydown',e=>{if(e.target.classList.contains('blank'))return;if(e.key==='ArrowRight'&&idx<SLIDES.length-1){idx++;render();}if(e.key==='ArrowLeft'&&idx>0){idx--;render();}});
+render();
+</script>
+</body>
+</html>

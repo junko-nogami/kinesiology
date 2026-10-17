@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>運動学 第8章E 股関節の運動</title>
+<style>
+:root{
+  --main:#7a2a3a; --main-dark:#5a1c28; --main-light:#a8556a; --accent:#c8a24a;
+  --bg:#f7f4f2; --card:#ffffff; --text:#2c2724; --sub:#6b625e; --line:#e2d9d5;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;}
+body{font-family:"Hiragino Kaku Gothic ProN","Yu Gothic","Meiryo",sans-serif;background:var(--bg);color:var(--text);display:flex;flex-direction:column;min-height:100vh;-webkit-text-size-adjust:100%;}
+header{background:var(--main);color:#fff;padding:10px 16px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:20;}
+header .ch{font-size:12px;letter-spacing:.12em;opacity:.85;}
+header .ttl{font-size:15px;font-weight:700;}
+header .count{margin-left:auto;font-size:13px;font-variant-numeric:tabular-nums;opacity:.9;}
+main{flex:1;display:flex;justify-content:center;padding:18px 14px 8px;}
+.slide{width:100%;max-width:860px;background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:0 2px 10px rgba(0,0,0,.05);padding:26px 28px 30px;animation:fade .25s ease;}
+@keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+@media (prefers-reduced-motion:reduce){.slide{animation:none;}}
+.eyebrow{display:inline-block;font-size:11px;letter-spacing:.14em;color:var(--main);background:#f3e9eb;border-radius:20px;padding:4px 12px;margin-bottom:12px;font-weight:700;}
+h2{font-size:23px;line-height:1.4;color:var(--main-dark);border-bottom:3px solid var(--main);padding-bottom:9px;margin-bottom:18px;}
+ul{list-style:none;}
+li{position:relative;padding-left:20px;margin-bottom:11px;line-height:1.85;font-size:16px;}
+li::before{content:"";position:absolute;left:2px;top:.72em;width:8px;height:8px;border-radius:2px;background:var(--main-light);}
+li ul{margin-top:8px;}
+li li{font-size:15px;color:var(--sub);margin-bottom:6px;}
+li li::before{background:var(--line);width:6px;height:6px;top:.75em;}
+.note{margin-top:16px;padding:11px 14px;font-size:13.5px;line-height:1.75;background:#faf6ee;border-left:4px solid var(--accent);border-radius:0 6px 6px 0;color:#5c4f38;}
+.note b{color:#8a6a20;}
+.tblwrap{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:14.5px;}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left;line-height:1.7;vertical-align:top;}
+th{background:var(--main);color:#fff;font-weight:700;white-space:nowrap;}
+tbody tr:nth-child(even){background:#faf7f7;}
+table.matrix{min-width:900px;font-size:12.5px;text-align:center;}
+table.matrix td{text-align:center;padding:5px 2px;}
+table.matrix td:first-child{text-align:left;white-space:nowrap;font-weight:700;background:#f7f1f2;padding:5px 8px;}
+table.matrix th{padding:6px 2px;text-align:center;font-size:11.5px;}
+table.matrix th.grp{background:var(--main-dark);}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.col{border:1px solid var(--line);border-radius:10px;overflow:hidden;}
+.col h4{background:var(--main);color:#fff;font-size:15px;padding:9px 12px;}
+.col.alt h4{background:var(--main-light);}
+.col .body{padding:12px 14px;}
+.col li{font-size:15px;margin-bottom:9px;}
+@media(max-width:640px){.two{grid-template-columns:1fr;}}
+.blank{display:inline-block;min-width:4.2em;text-align:center;padding:1px 8px;margin:0 1px;cursor:pointer;user-select:none;background:#f0e6e8;color:transparent;border-bottom:2px dashed var(--main-light);border-radius:4px;transition:background .15s,color .15s;}
+.blank:hover{background:#e5d5d9;}
+.blank:focus-visible{outline:3px solid var(--accent);outline-offset:2px;}
+.blank.open{background:transparent;color:var(--main-dark);font-weight:700;border-bottom:2px solid var(--accent);cursor:default;}
+.blank.hint{animation:pulse .9s ease;}
+@keyframes pulse{0%,100%{background:#f0e6e8;}50%{background:var(--accent);}}
+@media (prefers-reduced-motion:reduce){.blank.hint{animation:none;}}
+table.matrix .blank{min-width:2em;padding:1px 3px;}
+.cover{text-align:center;padding:48px 20px;}
+.cover .sub{font-size:14px;letter-spacing:.2em;color:var(--main-light);margin-bottom:14px;}
+.cover h1{font-size:32px;color:var(--main-dark);line-height:1.4;margin-bottom:10px;}
+.cover .en{font-size:13px;color:var(--sub);letter-spacing:.08em;margin-bottom:26px;}
+.cover .idx{display:inline-block;text-align:left;background:#faf7f7;border:1px solid var(--line);border-radius:10px;padding:16px 22px;font-size:15px;line-height:2;}
+.cover .idx b{color:var(--main);}
+footer{position:sticky;bottom:0;background:var(--bg);border-top:1px solid var(--line);padding:10px 14px 14px;}
+.tools{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:10px;}
+.tools button{font-family:inherit;font-size:13.5px;font-weight:700;cursor:pointer;border:1.5px solid var(--main);background:#fff;color:var(--main);padding:8px 15px;border-radius:22px;transition:.15s;}
+.tools button:hover{background:var(--main);color:#fff;}
+.tools button.primary{background:var(--main);color:#fff;}
+.tools button.primary:hover{background:var(--main-dark);border-color:var(--main-dark);}
+.tools button:focus-visible{outline:3px solid var(--accent);outline-offset:2px;}
+.nav{display:flex;align-items:center;justify-content:center;gap:14px;}
+.nav button{font-family:inherit;font-size:15px;cursor:pointer;border:none;background:var(--main);color:#fff;width:40px;height:40px;border-radius:50%;}
+.nav button:disabled{background:#cfc5c2;cursor:default;}
+.dots{display:flex;gap:5px;flex-wrap:wrap;justify-content:center;max-width:520px;}
+.dot{width:9px;height:9px;border-radius:50%;background:#d5cac7;border:none;padding:0;cursor:pointer;}
+.dot.active{background:var(--main);transform:scale(1.35);}
+.dot:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+</style></head>
+<body>
+<header>
+  <div>
+    <div class="ch">運動学 CHAPTER 8</div>
+    <div class="ttl">E 股関節の運動</div>
+  </div>
+  <div class="count"><span id="cur">1</span> / <span id="tot">1</span></div>
+</header>
+<main><div class="slide" id="slide"></div></main>
+<footer>
+  <div class="tools">
+    <button id="btnNext" class="primary">次のカッコを開く</button>
+    <button id="btnAll">すべて表示</button>
+    <button id="btnReset">リセット</button>
+  </div>
+  <div class="nav">
+    <button id="prev" aria-label="前のスライド">◀</button>
+    <div class="dots" id="dots"></div>
+    <button id="next" aria-label="次のスライド">▶</button>
+  </div>
+</footer>
+<script>
+const SLIDES = [
+
+{type:"cover", title:"股関節の運動", en:"Movement of the Hip Joint",
+ sub:"第8章 四肢と体幹の運動 E",
+ index:["<b>1.</b> 骨格（骨盤・大腿骨）","<b>2.</b> 関節（仙腸関節・股関節・靱帯）","<b>3.</b> 股関節の運動","<b>4.</b> 股関節の筋（16筋）"]},
+
+/* ---------- 1 骨格 ---------- */
+{type:"p", eyebrow:"1 骨格", title:"骨盤と大腿骨（図8-68）",
+ items:[
+  "<b>骨盤</b>：左右の[[寛骨]]（[[腸骨]]・[[坐骨]]・[[恥骨]]が合一したもの）、[[仙骨]]、[[尾骨]]よりなる",
+  "<b>大腿骨</b>は人体の骨格のなかで[[最大]]の[[管状長骨]]である",
+  "球状の[[大腿骨頭]]は滑らかな[[硝子様軟骨]]におおわれた関節面で、[[寛骨臼]]に対して股関節の[[関節頭]]をなす"
+ ],
+ note:"<b>ここがポイント：</b>寛骨は3つの骨（腸骨・坐骨・恥骨）が癒合してできたもの。その3つが合わさる場所がちょうど<b>寛骨臼</b>で、股関節の受け皿になります。"},
+
+{type:"tbl", eyebrow:"1 骨格", title:"大腿骨の角度（図8-69・8-70）",
+ head:["名称","定義","値"],
+ rows:[
+  ["[[頸体角]]","[[大腿骨頸]]と[[骨幹部]]のなす角","約[[120°]]"],
+  ["[[前捻角]]","大腿骨頸を[[上方]]からみたときの[[前方]]への向き","約[[30°]]"],
+  ["[[大腿脛骨外側角]]（[[FTA]]）","[[大腿骨長軸]]と[[脛骨長軸]]のなす角","正常の膝で約[[175°]]（軽度の[[外反]]）"],
+  ["[[下肢機能軸]]の傾き","[[大腿骨頭中心]]から[[足関節中心]]を結ぶ軸（[[運動軸]]・[[ミクリッツ線]]）の垂直方向からの傾き","約[[3°]][[外側]]"],
+  ["[[大腿骨長軸]]（[[解剖軸]]）の傾き","基本的立位肢位での垂直軸に対する傾き","[[9°]]〜[[10°]]"]],
+ note:"<b>つながる話：</b>下肢機能軸が外側に約3°傾くのは、<b>骨頭が上内前方（頸体角・前捻角）を向いているから</b>。3つの角度は別々の話ではなく、ひとつの立体構造の別の見方です。<br>また、下肢機能軸は立位での<b>下肢荷重線</b>を表し、股関節の運動はこの軸に沿って行われます。"},
+
+{type:"p", eyebrow:"1 骨格", title:"体表からの指標（図8-71・8-72）",
+ items:[
+  "<b>スカルパ三角</b>（[[大腿三角]]）<ul><li>[[鼠径靱帯]]・[[縫工筋内縁]]・[[長内転筋外縁]]の三辺に囲まれた三角形</li><li>深部に[[骨性抵抗]]を触れるのが[[大腿骨頭]]である</li></ul>",
+  "<b>ローザー・ネラトン線</b>（[[大転子]]の位置の確認に用いる）<ul><li>股関節[[45°]]屈曲位で、[[上前腸骨棘]]と[[坐骨結節]]を結ぶ直線</li><li>この線上に[[大転子]]がある</li><li>X線写真で正常大転子の高さは、ほぼ[[大腿骨頭中心]]に位置する</li></ul>"
+ ],
+ note:"<b>触診で使う：</b>スカルパ三角は「上辺＝鼠径靱帯、外側辺＝縫工筋、内側辺＝長内転筋」の3辺。ここを押して硬い抵抗があれば大腿骨頭です。"},
+
+/* ---------- 2 関節 ---------- */
+{type:"p", eyebrow:"2 関節", title:"仙腸関節と股関節（図8-73）",
+ items:[
+  "<b>仙腸関節</b><ul><li>関節は[[線維軟骨]]でおおわれる</li><li>関節包は[[骨膜]]と密着して[[靱帯]]で[[強固]]に連結しているので、可動性は[[ほとんどない]]</li></ul>",
+  "<b>股関節</b><ul><li>[[寛骨臼]]と[[大腿骨頭]]のあいだの関節</li><li>屈曲・伸展、内転、外転、内旋、外旋、[[分回し運動]]など、あらゆる方向の運動が可能な[[球関節]]（[[臼状関節]]）</li><li>関節窩は骨頭の約[[2/3]]を入れている</li><li>さらにその深さを補うために[[関節唇]]と[[寛骨臼横靱帯]]がある</li><li>関節包は[[関節唇]]のすぐ外側から起こり、[[大腿骨頸部]]を包み、[[大・小転子]]近くの大腿骨頸の縁に付着する</li></ul>"
+ ],
+ note:"<b>肩関節と比べる：</b>肩も股関節も球関節ですが、肩の関節窩が浅いのに対し、<b>股関節は骨頭の2/3を包み込む「臼状」</b>。だから可動域は肩に劣り、安定性ははるかに勝ります。"},
+
+{type:"p", eyebrow:"2 関節", title:"股関節の靱帯（図8-74）",
+ lead:"股関節の靱帯は[[6]]つあります。",
+ items:[
+  "[[寛骨臼横靱帯]]",
+  "[[大腿骨頭靱帯]]",
+  "[[輪帯]]",
+  "[[腸骨大腿靱帯]]",
+  "[[恥骨大腿靱帯]]",
+  "[[坐骨大腿靱帯]]"
+ ],
+ note:"<b>整理のコツ：</b>後半3つは「<b>○骨大腿靱帯</b>」というシリーズ。<b>腸骨＝前上／恥骨＝前下／坐骨＝後面</b>と、名前の骨がある位置に張っていると覚えられます。"},
+
+{type:"tbl", eyebrow:"2 関節", title:"主な靱帯の特徴",
+ head:["靱帯","特徴"],
+ rows:[
+  ["[[大腿骨頭靱帯]]","[[寛骨臼窩]]と[[大腿骨頭窩]]を結ぶ[[三角柱状]]の靱帯。長さ約[[3cm]]、力学的には[[45kg]]程度の張力に耐える強度をもつ<br>ただし[[骨頭固定]]のためにはほとんど機能せず、主要な役割は大腿骨頭への[[血液供給の経路]]である"],
+  ["[[輪帯]]","[[関節包]]の[[内面]]に密着する[[線維束]]。関節窩上縁から[[2つ]]に分かれて[[大腿骨頸]]をとりまき、関節包の[[過度の伸展]]を防ぐ"],
+  ["[[腸骨大腿靱帯]]","[[人体中の最強]]の靱帯。[[下前腸骨棘]]から[[扇状]]にひろがって[[転子間]]につく<br>[[中央部分]]は薄く比較的弱いが、[[上部]]と[[下部]]は強力である<br>形が[[逆Y字型]]をしているために[[Y靱帯]]ともいわれる"],
+  ["[[恥骨大腿靱帯]]","股関節の[[前下方]]にあり、[[恥骨]]と[[小転子]]を結び、関節包の強度を補強している"],
+  ["[[坐骨大腿靱帯]]","股関節[[後面]]にあり、[[寛骨臼縁]]の[[坐骨部]]から起こり、一部は[[輪帯]]に、一部は[[大転子内側]]につく"]],
+ note:"<b>国試頻出：</b>「人体最強の靱帯＝<b>腸骨大腿靱帯（Y靱帯）</b>」「大腿骨頭靱帯の役割＝<b>血液供給</b>（固定ではない）」。この2つは必ず問われます。"},
+
+{type:"mtx", eyebrow:"2 関節", title:"表8-9 股関節の動きと靱帯の緊張",
+ lead:"[[‡]] 〜 [[−]] で靱帯の緊張の度合いを示します（‡が最も強く緊張／−は緊張しない）。",
+ groups:null,
+ head:["靱帯","屈曲","伸展","外転","内転","外旋","内旋"],
+ rows:[
+  ["腸骨大腿靱帯（上）","−","＋","−","‡","＋","−"],
+  ["腸骨大腿靱帯（下）","−","‡","＋","＋","＋","−"],
+  ["恥骨大腿靱帯","−","＋","‡","−","＋","−"],
+  ["坐骨大腿靱帯","−","＋","−","＋","−","＋"],
+  ["大腿骨頭靱帯","−","−","−","＋","−","−"]],
+ note:"<b>縦に読む：</b><b>屈曲の列はすべて「−」</b>——股関節屈曲位ではすべての靱帯がゆるみます。だから屈曲位では内・外旋の可動域が大きくなり、また脱臼もしやすくなります。<br><span style='font-size:12.5px'>（Lanz et al. 1959）</span>"},
+
+/* ---------- 3 運動 ---------- */
+{type:"tbl", eyebrow:"3 股関節の運動", title:"1) 屈曲　—　膝の肢位で変わる",
+ lead:"股関節の屈曲可動域は[[膝関節の肢位]]に依存します。",
+ head:["膝関節の肢位","自動","他動","理由"],
+ rows:[
+  ["[[伸展]]位","[[90°]]","[[120°]]","股関節伸筋群である[[大腿二頭筋]]・[[半腱様筋]]・[[半膜様筋]]（3筋を総称して[[ハムストリングス]]）が[[緊張]]するため"],
+  ["[[屈曲]]位","[[120°]]","[[140°]]","ハムストリングスが[[弛緩]]しているため"]],
+ note:"<b>ここがポイント：</b>両股関節を同時に屈曲すると、<b>腰椎が後彎して骨盤の運動が伴い</b>、大腿の前面が体幹に触れるほど屈曲するようにみえます。見た目の角度＝股関節の角度ではありません。"},
+
+{type:"p", eyebrow:"3 股関節の運動", title:"2) 伸展",
+ items:[
+  "股関節の伸展可動域も[[膝関節]]の肢位で異なる",
+  "膝関節[[屈曲]]位 → 股関節の自動伸展は約[[10°]]<ul><li>ハムストリングスの[[仕事能]]のうち、[[膝関節屈曲]]に費やされる部分が[[大きい]]ため</li></ul>",
+  "膝関節[[伸展]]位 → 約[[20°]]となる",
+  "体操競技などで[[過度の伸展]]がみられるのは、[[骨盤の回旋]]と[[大腿骨の外旋]]を伴うためである"
+ ],
+ note:"<b>屈曲と逆向きの関係：</b>屈曲は「膝を曲げると大きくなる」、伸展は「膝を<b>伸ばす</b>と大きくなる」。どちらもハムストリングスの張り具合で決まっています。"},
+
+{type:"p", eyebrow:"3 股関節の運動", title:"3) 外転",
+ items:[
+  "骨盤を[[固定しないで]]片側の股関節を外転すると、[[骨盤の傾斜]]が加わって[[対側]]の股関節も外転する",
+  "[[30°]]以上の外転でこの現象が起こる",
+  "[[90°]]外転位では、両股関節がそれぞれ[[45°]]ずつ外転していることになる",
+  "外転運動の制限因子は[[靱帯]]と[[内転筋群]]の緊張である",
+  "両膝関節と股関節を[[90°]]屈曲させ、両股関節を外転させた肢位を[[開排位]]という",
+  "開排位は臨床的には[[先天性股関節脱臼]]などの診断に用いられる"
+ ],
+ note:"<b>測定の注意：</b>骨盤を押さえないと、見かけ上90°外転していても実際は片側45°ずつ。ROM測定で骨盤の固定が重要な理由がここにあります。"},
+
+{type:"p", eyebrow:"3 股関節の運動", title:"4) 内転",
+ items:[
+  "基本肢位から股関節を内転するには、[[屈曲要因]]が加わらなければならない",
+  "椅子に座って[[膝を組んだ]]状態は[[屈曲]]・[[内転]]位である",
+  "股関節[[屈曲位]]は[[靱帯]]がすべて[[弛緩]]状態にあり、さらに内転で関節における[[骨の接合状態]]が最も[[緩い]]条件下にある",
+  "制限因子<ul><li>基本肢位 → [[対側下肢]]との[[接触]]</li><li>屈曲位 → [[坐骨大腿靱帯]]の緊張</li></ul>"
+ ],
+ note:"<b>臨床とつなげる：</b>「屈曲＋内転」は靱帯がゆるみ骨の噛み合わせも最も浅い肢位。<b>後方脱臼が起こりやすい肢位</b>であり、人工股関節術後の禁忌肢位として指導されます。"},
+
+{type:"p", eyebrow:"3 股関節の運動", title:"5) 内旋・外旋",
+ items:[
+  "股関節[[伸展]]位では、内・外旋それぞれ[[45°]]の関節可動域がある",
+  "股関節[[屈曲]]位では[[靱帯]]が[[弛緩]]するため、内・外旋の可動域は[[大きく]]なる",
+  "<b>外旋</b>の制限因子：[[腸骨大腿靱帯]]の緊張と[[内旋筋群]]の緊張",
+  "<b>内旋</b>の制限因子：[[外旋筋群]]の緊張<ul><li>股関節[[屈曲]]位 → [[坐骨大腿靱帯]]</li><li>股関節[[伸展]]位 → [[腸骨大腿靱帯]]の緊張</li></ul>"
+ ],
+ note:"<b>表8-9で確認：</b>外旋の列で「＋」がつくのは腸骨大腿靱帯（上・下）と恥骨大腿靱帯、内旋の列で唯一「＋」がつくのは坐骨大腿靱帯。本文の制限因子と表がぴたり対応します。"},
+
+/* ---------- 4 筋 ---------- */
+{type:"two", eyebrow:"4 股関節の筋", title:"部位による筋の分類（16筋）",
+ lead:"股関節の運動に関する筋のうち、いくつかのものは[[2関節筋]]として[[膝関節]]の運動にも作用します。",
+ left:{h:"前部・外側", items:[
+   "前部：[[腸腰筋]]・[[縫工筋]]・[[恥骨筋]]・[[大腿筋膜張筋]]・[[大腿直筋]]",
+   "外側：[[中殿筋]]・[[小殿筋]]"]},
+ right:{h:"後部・内側", items:[
+   "後部：[[大殿筋]]・[[大腿二頭筋]]・[[半腱様筋]]・[[半膜様筋]]・[[深層外旋6筋]]",
+   "内側：[[薄筋]]・[[大内転筋]]・[[長内転筋]]・[[短内転筋]]"]},
+ note:"<b>位置＝作用：</b>前部＝屈曲、後部＝伸展、外側＝外転、内側＝内転。8章を通しての原則がここでもそのまま当てはまります。"},
+
+{type:"tbl", eyebrow:"4 表8-10", title:"股関節の筋 ①前部の筋",
+ head:["筋","起始","停止","神経支配","作用"],
+ rows:[
+  ["腸腰筋","腸骨筋：[[腸骨内面]]<br>大腰筋：[[T12〜L4]]<br>小腰筋：[[T12〜L1]]","大腿骨[[小転子]]<br>小腰筋の一部は[[腸骨筋膜]]","[[腰神経叢]]、[[大腿神経]] L2〜L4<br>小腰筋は[[L1]]","股関節[[屈曲]]、[[骨盤]]・[[腰椎前傾]]"],
+  ["縫工筋","[[上前腸骨棘]]","[[脛骨粗面内側]]","[[大腿神経]] L2〜L3","股関節[[屈曲]]・[[外転]]・[[外旋]]<br>膝関節[[屈曲]]・[[内旋]]"],
+  ["大腿直筋","[[下前腸骨棘]]、[[臼蓋上縁]]","[[膝蓋靱帯]]（[[脛骨粗面]]につく）","[[大腿神経]] L2〜L4","股関節[[屈曲]]<br>膝関節[[伸展]]"],
+  ["恥骨筋","[[恥骨櫛]]","大腿骨の[[恥骨筋線]]","[[大腿神経]]、（[[閉鎖神経]]）L2〜L3","股関節[[屈曲]]・[[内転]]"],
+  ["大腿筋膜張筋","[[上前腸骨棘]]、[[中殿筋膜]]","[[腸脛靱帯]]（[[脛骨外側顆]]の前方の粗面につく）","[[上殿神経]] L4〜L5","股関節[[内旋]]・[[屈曲]]・[[外転]]<br>膝関節[[伸展]]"]],
+ note:"<b>2関節筋に注目：</b>縫工筋・大腿直筋・大腿筋膜張筋は<b>股関節と膝関節の両方をまたぐ</b>ので、作用欄が2行になっています。ここが単関節筋との見分け方です。"},
+
+{type:"tbl", eyebrow:"4 表8-10", title:"股関節の筋 ②後部・外側の筋",
+ head:["筋","起始","停止","神経支配","作用"],
+ rows:[
+  ["大殿筋","[[後殿線後部]]、[[腰背筋膜]]、[[仙骨]]、[[尾骨外側]]、[[仙結節靱帯]]","大腿骨[[殿筋粗面]]、[[腸脛靱帯]]","[[下殿神経]] L4〜S2","股関節[[伸展]]・[[外旋]]"],
+  ["大腿二頭筋","長頭：[[坐骨結節]]<br>短頭：[[大腿骨後下面]]","[[腓骨頭]]","長頭：[[脛骨神経]]<br>短頭：[[腓骨神経]] L5〜S2","股関節[[伸展]]・[[外旋]]<br>膝関節[[屈曲]]・[[外旋]]"],
+  ["半腱様筋","[[坐骨結節]]","[[脛骨粗面内側]]","[[脛骨神経]] L4〜S2","股関節[[伸展]]・[[内転]]<br>膝関節[[屈曲]]・[[内旋]]"],
+  ["半膜様筋","[[坐骨結節]]","[[脛骨内側顆]]、[[斜膝窩靱帯]]、[[下腿筋膜]]","[[脛骨神経]] L4〜S1","股関節[[伸展]]<br>膝関節[[屈曲]]・[[内旋]]"],
+  ["中殿筋","[[腸骨後面]]","[[大転子外側]]","[[上殿神経]] L4〜S1","股関節[[外転]]"],
+  ["小殿筋","[[腸骨後面]]","[[大転子]]","[[上殿神経]] L4〜S1","股関節[[内旋]]・[[外転]]"],
+  ["深層外旋6筋","[[仙骨]]、[[坐骨後面]]、[[閉鎖孔]]","大腿骨[[大転子後面]]","[[閉鎖神経]]、[[仙骨神経]] L3〜S4","股関節[[外旋]]"]],
+ note:"<b>神経で整理：</b>殿筋群は「上殿神経＝<b>中殿筋・小殿筋・大腿筋膜張筋</b>（外転筋群）／下殿神経＝<b>大殿筋</b>」。この分け方がトレンデレンブルグ徴候の理解につながります。"},
+
+{type:"tbl", eyebrow:"4 表8-10", title:"股関節の筋 ③内側の筋（内転筋群）",
+ head:["筋","起始","停止","神経支配","作用"],
+ rows:[
+  ["薄筋","[[恥骨下枝下縁]]","[[脛骨]]の[[内側面]]","[[閉鎖神経]] L2〜L4","股関節[[内転]]<br>膝関節[[屈曲]]・[[内旋]]"],
+  ["長内転筋","[[恥骨結節]]","大腿骨[[後面中央]]","[[閉鎖神経]] L2〜L4","股関節[[内転]]"],
+  ["短内転筋","[[恥骨下枝]]と[[坐骨下枝]]の境","大腿骨[[後面上部]]","[[閉鎖神経]] L2〜L4","股関節[[内転]]"],
+  ["大内転筋","[[坐骨結節]]、[[坐骨下枝]]","大腿骨[[後面中央]]、[[内転筋結節]]","深層：[[閉鎖神経]]<br>表層：[[坐骨神経]] L3〜L4","股関節[[内転]]"]],
+ note:"<b>ここがポイント：</b>内転筋群は<b>すべて閉鎖神経</b>支配（大内転筋の表層だけ坐骨神経が加わる）。閉鎖神経麻痺では内転ができなくなります。"},
+
+{type:"mtx", eyebrow:"4 表8-11", title:"股関節の筋活動と関節運動",
+ lead:"○＝主に働く筋（動筋）／△＝補助的に働く筋（補助動筋）",
+ groups:null,
+ head:["筋","屈曲","伸展","外転","内転","外旋","内旋"],
+ rows:[
+  ["腸腰筋","○","","","","△",""],
+  ["縫工筋","△","","△","","△",""],
+  ["大腿直筋","○","","△","","",""],
+  ["恥骨筋","○","","","○","△",""],
+  ["大腿筋膜張筋","○","","○","","",""],
+  ["大殿筋","","○","△","△","○",""],
+  ["大腿二頭筋","","○","","","△",""],
+  ["半腱様筋","","○","","","","△"],
+  ["半膜様筋","","○","","","","△"],
+  ["中殿筋","△","△","○","","△","△"],
+  ["小殿筋","△","△","△","","△","○"],
+  ["薄筋","△","","","○","",""],
+  ["長内転筋","△","","","○","△",""],
+  ["短内転筋","△","","","○","△",""],
+  ["大内転筋","△","","","○","",""],
+  ["深層外旋6筋","","","","","○",""]],
+ note:"<b>縦に読む：</b>屈曲の動筋は<b>腸腰筋・大腿直筋・恥骨筋・大腿筋膜張筋</b>、伸展は<b>大殿筋とハムストリングス3筋</b>、外転は<b>中殿筋・大腿筋膜張筋</b>、内転は<b>内転筋群＋恥骨筋</b>、外旋は<b>大殿筋・深層外旋6筋</b>、内旋は<b>小殿筋だけ</b>。<br>※これらの表は、重力などの外力を無視した状態で筋が収縮（短縮）したときに起こる関節運動を示しています。"},
+
+/* ---------- 各論 ---------- */
+{type:"p", eyebrow:"筋の各論 ①", title:"腸腰筋（図8-75）",
+ items:[
+  "[[腸骨窩]]内の[[深部]]にあって[[触れにくい]]。やせている人で[[腹筋]]を弛緩し、股関節を屈曲させると触れることもある",
+  "腸腰筋は[[腸骨筋]]・[[大腰筋]]・[[小腰筋]]の[[3]]部分からなる",
+  "いずれも[[鼠径靱帯]]の下を通り、[[合一した腱]]となり、大腿骨の[[小転子]]につく（小腰筋は[[腸骨筋膜]]に分散する）",
+  "主な作用は股関節[[屈曲]]で、肢位によっては股関節[[内転]]に補助的に働く",
+  "[[大腿部]]を[[固定]]した状態で収縮すると、[[骨盤]]・[[腰椎]]を[[前傾]]させる"
+ ],
+ note:"<b>臨床とつなげる：</b>腸腰筋が短縮すると骨盤が前傾し、腰椎前彎が強まります。デスクワークで股関節屈曲位が続く人の腰痛によく関係します。"},
+
+{type:"p", eyebrow:"筋の各論 ②", title:"縫工筋・大腿直筋（図8-76）",
+ items:[
+  "<b>縫工筋</b>は人体のなかで[[最長]]の筋で、[[上前腸骨棘]]から大腿前面を[[斜内側]]に横ぎる[[2関節筋]]である",
+  "椅子に座って[[膝を組む]]ときに起始部を触れる。主な作用は股関節[[屈曲]]で、[[外転]]・[[外旋]]作用もある",
+  "<b>大腿四頭筋</b>は[[大腿直筋]]・[[外側広筋]]・[[中間広筋]]・[[内側広筋]]の[[4]]つの部分からなる",
+  "このうち[[大腿直筋]]のみが[[2関節筋]]である",
+  "主な作用は、股関節には[[屈曲]]と補助的に[[外転]]作用。膝関節には[[伸展]]に強力な力を発揮する",
+  "大腿直筋による股関節屈曲は膝関節[[屈曲]]位で、膝関節伸展は股関節[[伸展]]位で有効に働く",
+  "この筋はボールを[[蹴る]]動作で働くことから、[[kicking muscle]]とよばれる"
+ ],
+ note:"<b>2関節筋の原則：</b>片方の関節で筋が伸ばされているほど、もう片方での力が出ます。だから「膝を曲げた状態で股関節を屈曲」「股関節を伸ばした状態で膝を伸展」が有効になります。"},
+
+{type:"p", eyebrow:"筋の各論 ③", title:"恥骨筋・大腿筋膜張筋（図8-75・8-76）",
+ items:[
+  "<b>恥骨筋</b>：股関節[[屈曲]]と[[内転]]作用を行う。また屈曲しながら[[外旋]]作用を助ける",
+  "<b>大腿筋膜張筋</b>：筋自身は股関節の[[前外側部]]にある[[小さな]]筋であるが、[[腸脛靱帯]]に移行してその作用は[[脛骨]]に及ぶ",
+  "[[2関節筋]]の機能をもつために、股関節には[[屈曲]]・[[外転]]作用、膝関節には[[伸展]]・[[下腿の外旋]]作用を行う",
+  "筋の発揮する力は比較的[[弱い]]が、[[歩行]]・[[走行]]時に下肢を[[まっすぐ]]にして足を踏み出すのに重要な働きをする"
+ ],
+ note:"<b>ここがポイント：</b>大腿筋膜張筋は「小さな筋が長い腱（腸脛靱帯）を介して遠くまで働く」典型。筋そのものは弱くても、歩行のたびに下肢を安定させています。"},
+
+{type:"p", eyebrow:"筋の各論 ④", title:"大殿筋（図8-77）",
+ items:[
+  "[[殿部最表層]]の強力な股関節[[伸展]]・[[外旋]]筋である",
+  "股関節を運動軸として、筋の上[[1/3]]は軸より[[上部]]を、下[[2/3]]は軸より[[下部]]を走行する",
+  "したがって、[[上部]]線維は股関節[[外転]]に、[[下部]]線維は[[内転]]作用に補助的な働きをする",
+  "[[大腿部]]を固定して[[起始部]]に力が働いたときには、大殿筋は[[骨盤]]を引き、[[体幹]]を伸ばして[[直立位]]とする",
+  "大殿筋は[[走]]・[[跳]]・[[速歩]]・[[階段歩行]]時に働く"
+ ],
+ note:"<b>表8-11で確認：</b>大殿筋が外転△と内転△の<b>両方</b>についているのは、上部線維と下部線維で運動軸をはさむ位置が逆だから。1つの筋の中で作用が分かれる例です。"},
+
+{type:"p", eyebrow:"筋の各論 ⑤", title:"中殿筋・小殿筋（図8-78）",
+ items:[
+  "<b>中殿筋</b>は大部分が[[大殿筋]]におおわれるが、股関節[[外転]]時に[[大転子上部]]にその緊張を触れる",
+  "中殿筋は股関節[[外転]]を主な作用とするが、[[屈曲]]・[[伸展]]・[[内・外旋]]にも補助的な作用をする",
+  "<b>小殿筋</b>は中殿筋の[[深層]]にあって[[触れることはできない]]",
+  "小殿筋は股関節の[[内旋]]を主な作用とするが、[[屈曲]]・[[伸展]]・[[外転]]・[[外旋]]にも補助的に働く",
+  "中殿筋と小殿筋は[[歩行筋]]・[[姿勢保持筋]]として重要である"
+ ],
+ note:"<b>比べて覚える：</b>中殿筋の主作用は<b>外転</b>、小殿筋の主作用は<b>内旋</b>。表8-11でも中殿筋の外転だけが○、小殿筋の内旋だけが○になっています。"},
+
+{type:"p", eyebrow:"筋の各論 ⑤", title:"トレンデレンブルグ徴候",
+ items:[
+  "[[中殿筋]]・[[小殿筋]]や[[大殿筋]]・[[大腿筋膜張筋]]などの股関節[[外転筋群]]の[[麻痺]]があると…",
+  "[[麻痺側立脚相]]で[[大腿骨]]と[[骨盤]]の[[固定]]ができない",
+  "そのため、体幹は[[麻痺側]]に突き出し、骨盤は[[遊脚側]]に傾く",
+  "これを[[トレンデレンブルグ徴候]]という",
+  "この状態での歩行を[[中殿筋歩行]]あるいは[[トレンデレンブルグ歩行]]という"
+ ],
+ note:"<b>方向を間違えない：</b><b>体幹は麻痺側へ／骨盤は遊脚側（健側）へ傾く</b>。支えを失った側に骨盤が落ちる、と考えると向きを取り違えません。"},
+
+{type:"p", eyebrow:"筋の各論 ⑥", title:"ハムストリングス（図8-79）",
+ items:[
+  "<b>大腿二頭筋</b>は[[長頭]]が[[2関節筋]]として股関節の運動に関与する",
+  "股関節の[[伸展]]を主な作用とし、[[外旋]]にも働く。膝関節については[[屈曲]]と[[外旋]]作用を行う",
+  "したがって[[膝関節屈曲]]位では、股関節[[伸展筋]]としての働きは十分に発揮されない",
+  "<b>半腱様筋・半膜様筋</b>は両筋とも[[2関節筋]]である",
+  "股関節には[[伸展]]作用と[[内旋]]の補助的作用、膝関節には[[屈曲]]と[[内旋]]作用をもつ",
+  "[[半腱様筋]]・[[縫工筋]]・[[薄筋]]が腱として[[脛骨粗面]]に付着するが、[[前下方]]に放散する形からその部分を[[鵞足]]という"
+ ],
+ note:"<b>回旋で区別：</b>ハムストリングスのうち<b>外側の大腿二頭筋は外旋、内側の半腱様筋・半膜様筋は内旋</b>。筋の位置がそのまま回旋方向になります。<br><b>鵞足の3筋</b>（縫工筋・薄筋・半腱様筋）は語呂「<b>ハン・ボウ・ホウ</b>（半腱様筋・薄筋・縫工筋）」で覚えられます。"},
+
+{type:"p", eyebrow:"筋の各論 ⑦", title:"内転筋群（図8-80）",
+ items:[
+  "<b>薄筋</b>：[[2関節筋]]で、股関節の[[内転]]作用、補助的には[[屈曲]]・[[内旋]]作用、また膝関節には[[屈曲]]・[[内旋]]作用をもつ",
+  "<b>長内転筋</b>は[[鼠径部]]の[[内側]]に起始部を触れる",
+  "<b>短内転筋</b>は長内転筋のすぐ[[上]]の部分にあるが、[[深部]]のため触れない",
+  "いずれも股関節[[内転]]作用を主な働きとするが、[[屈曲]]・[[外旋]]にも働く",
+  "股関節が[[70°]]以上屈曲すると、筋の走行と運動軸の関係から股関節[[伸筋]]として働くようになる",
+  "<b>大内転筋</b>は内転筋群のうちで最も[[大きく]]、最も[[強力]]な筋である",
+  "主な作用は[[内転]]であるが、[[内旋]]作用もある。股関節の[[肢位]]で[[屈筋]]あるいは[[伸筋]]としての機能をもつことがある"
+ ],
+ note:"<b>また出てきました：</b>「70°以上屈曲すると屈筋が伸筋に変わる」——8章Bの三角筋・大胸筋で学んだ<b>筋の習慣的機能の転倒</b>と同じ現象です。"},
+
+{type:"p", eyebrow:"筋の各論 ⑧", title:"深層外旋6筋（図8-79）",
+ lead:"股関節の[[後面深部]]にあり、[[外旋]]作用をもつ[[6]]筋です。",
+ items:[
+  "[[内閉鎖筋]]・[[外閉鎖筋]]",
+  "[[上双子筋]]・[[下双子筋]]",
+  "[[大腿方形筋]]",
+  "[[梨状筋]]",
+  "最も[[近位]]にある[[梨状筋]]は、股関節の運動軸より[[上方]]を走行するために[[外転]]作用を補助的に行う",
+  "最も[[遠位]]の[[大腿方形筋]]は、運動軸より[[下方]]を走行するために[[内転]]作用を補助的に行う"
+ ],
+ note:"<b>大殿筋と同じ理屈：</b>運動軸の上を通るか下を通るかで、外転になるか内転になるかが決まります。筋の位置関係を図でイメージすると丸暗記が不要になります。"},
+
+/* ---------- まとめ ---------- */
+{type:"tbl", eyebrow:"まとめ", title:"重要数値の総整理",
+ lead:"数値問題はここから出ます。空欄で確認しましょう。",
+ head:["項目","数値"],
+ rows:[
+  ["頸体角","約[[120°]]"],
+  ["前捻角","約[[30°]]"],
+  ["大腿脛骨外側角（FTA）","約[[175°]]"],
+  ["下肢機能軸の傾き","約[[3°]]外側"],
+  ["大腿骨長軸（解剖軸）の傾き","[[9°]]〜[[10°]]"],
+  ["関節窩が包む骨頭の割合","約[[2/3]]"],
+  ["大腿骨頭靱帯の長さ／耐えられる張力","約[[3cm]]／約[[45kg]]"],
+  ["屈曲（膝伸展位）自動／他動","[[90°]]／[[120°]]"],
+  ["屈曲（膝屈曲位）自動／他動","[[120°]]／[[140°]]"],
+  ["伸展（膝屈曲位／膝伸展位）","約[[10°]]／約[[20°]]"],
+  ["対側の外転が起こり始める角度","[[30°]]以上"],
+  ["内・外旋（伸展位）","それぞれ[[45°]]"],
+  ["内転筋が伸筋に変わる屈曲角度","[[70°]]以上"],
+  ["ローザー・ネラトン線を引く肢位","股関節[[45°]]屈曲位"]],
+ note:"<b>※</b>関節可動域は年齢・性別・運動歴などにより個人差があり、「正常関節可動域」という概念はありません。本章の数値はすべて<b>参考関節可動域</b>です（8章A脚注）。"},
+
+{type:"two", eyebrow:"まとめ", title:"神経支配で最終チェック",
+ left:{h:"腰神経叢由来", items:[
+   "[[大腿神経]]：[[腸腰筋]]・[[縫工筋]]・[[大腿直筋]]・[[恥骨筋]]",
+   "[[閉鎖神経]]：[[薄筋]]・[[長内転筋]]・[[短内転筋]]・[[大内転筋]]（深層）"]},
+ right:{h:"仙骨神経叢由来", items:[
+   "[[上殿神経]]：[[中殿筋]]・[[小殿筋]]・[[大腿筋膜張筋]]",
+   "[[下殿神経]]：[[大殿筋]]",
+   "[[脛骨神経]]：[[半腱様筋]]・[[半膜様筋]]・[[大腿二頭筋長頭]]",
+   "[[腓骨神経]]：[[大腿二頭筋短頭]]"]},
+ note:"<b>最後の確認：</b>前は大腿神経、内は閉鎖神経、外は上殿神経、後は下殿神経と坐骨神経（脛骨神経・腓骨神経）。<b>部位と神経がきれいに対応</b>しています。"}
+
+];
+</script>
+<script>
+const slideEl=document.getElementById('slide');
+const dotsEl=document.getElementById('dots');
+let idx=0;
+function blanks(t){return String(t).replace(/\[\[(.+?)\]\]/g,(m,a)=>`<span class="blank" tabindex="0" role="button" aria-label="空欄">${a}</span>`);}
+const li=arr=>arr.map(t=>`<li>${blanks(t)}</li>`).join('');
+function render(){
+  const s=SLIDES[idx];let h='';
+  if(s.type==='cover'){
+    h=`<div class="cover"><div class="sub">${s.sub}</div><h1>${s.title}</h1><div class="en">${s.en}</div><div class="idx">${s.index.join('<br>')}</div></div>`;
+  }else{
+    h+=`<div class="eyebrow">${s.eyebrow}</div><h2>${s.title}</h2>`;
+    if(s.lead) h+=`<p style="margin-bottom:14px;line-height:1.85;font-size:15.5px;">${blanks(s.lead)}</p>`;
+    if(s.type==='p'){h+=`<ul>${li(s.items)}</ul>`;}
+    else if(s.type==='tbl'){h+=`<div class="tblwrap"><table><thead><tr>${s.head.map(x=>`<th>${x}</th>`).join('')}</tr></thead><tbody>${s.rows.map(r=>`<tr>${r.map(c=>`<td>${blanks(c)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;}
+    else if(s.type==='mtx'){
+      let th1='';
+      if(s.groups){th1='<tr><th rowspan="2">筋</th>'+s.groups.map(g=>`<th class="grp" colspan="${g[1]}">${g[0]}</th>`).join('')+'</tr>';}
+      h+=`<div class="tblwrap"><table class="matrix"><thead>${th1}<tr>${s.head.map(x=>`<th>${x}</th>`).join('')}</tr></thead><tbody>${s.rows.map(r=>`<tr>${r.map((c,i)=>`<td>${i===0?c:(c?blanks('[['+c+']]'):'')}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;}
+    else if(s.type==='two'){
+      h+=`<div class="two"><div class="col"><h4>${s.left.h}</h4><div class="body"><ul>${li(s.left.items)}</ul></div></div><div class="col alt"><h4>${s.right.h}</h4><div class="body"><ul>${li(s.right.items)}</ul></div></div></div>`;}
+    if(s.note) h+=`<div class="note">${blanks(s.note)}</div>`;
+  }
+  slideEl.innerHTML=h;
+  document.getElementById('cur').textContent=idx+1;
+  [...dotsEl.children].forEach((d,i)=>d.classList.toggle('active',i===idx));
+  document.getElementById('prev').disabled=(idx===0);
+  document.getElementById('next').disabled=(idx===SLIDES.length-1);
+  slideEl.querySelectorAll('.blank').forEach(b=>{
+    b.addEventListener('click',()=>b.classList.add('open'));
+    b.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();b.classList.add('open');}});
+  });
+  window.scrollTo({top:0,behavior:'instant'});
+}
+document.getElementById('tot').textContent=SLIDES.length;
+SLIDES.forEach((_,i)=>{const b=document.createElement('button');b.className='dot';b.setAttribute('aria-label',`スライド${i+1}`);b.onclick=()=>{idx=i;render();};dotsEl.appendChild(b);});
+document.getElementById('prev').onclick=()=>{if(idx>0){idx--;render();}};
+document.getElementById('next').onclick=()=>{if(idx<SLIDES.length-1){idx++;render();}};
+document.getElementById('btnNext').onclick=()=>{const b=slideEl.querySelector('.blank:not(.open)');if(b){b.classList.add('open','hint');setTimeout(()=>b.classList.remove('hint'),900);b.scrollIntoView({block:'center',behavior:'smooth'});}};
+document.getElementById('btnAll').onclick=()=>slideEl.querySelectorAll('.blank').forEach(b=>b.classList.add('open'));
+document.getElementById('btnReset').onclick=()=>slideEl.querySelectorAll('.blank').forEach(b=>b.classList.remove('open'));
+document.addEventListener('keydown',e=>{if(e.target.classList.contains('blank'))return;if(e.key==='ArrowRight'&&idx<SLIDES.length-1){idx++;render();}if(e.key==='ArrowLeft'&&idx>0){idx--;render();}});
+render();
+</script>
+</body>
+</html>
